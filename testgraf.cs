@@ -70,17 +70,19 @@ class Graph{
         int jumlahSimpul, i;
         char namaAkun, namaExplore;
         string[] lines = System.IO.File.ReadAllLines("input.txt");
-        string[] line;
-        List<(char, string)> edgeList;
+        //char[] line;
+        List<(char, char)> edgeList;
+        edgeList = new List<(char, char)>();
         Boolean found1, found2;
-        edgeList = new List<(char, string)>();
+        char[] friends;
         
         jumlahSimpul = Int32.Parse(lines[0]);
 
         for (i = 1; i <= jumlahSimpul; i++){
-            line = lines[i].Split(' ');
+            //line = lines[i].Split(' ');
+            char[] line = lines[i].ToCharArray();
             char u = lines[i][0];
-            string v = line[1];//;lines[i]
+            char v = line[2];//;lines[i]
             System.Console.WriteLine("Simpul Asal   : " + u);
             System.Console.WriteLine("Simpul Tujuan : " + v);
             edgeList.Add((u, v));
@@ -88,6 +90,8 @@ class Graph{
         
         foreach (var a in edgeList){
             Console.WriteLine(a);
+            //Console.WriteLine(a.Item1);
+            
         }
     
         Console.Write("Choose Account : ");
@@ -119,5 +123,7 @@ class Graph{
             System.Console.WriteLine("Tidak ada jalur koneksi yang tersedia");
             System.Console.WriteLine("Anda harus memulai koneksi baru itu sendiri.");
         }
+
+
     }
 }
