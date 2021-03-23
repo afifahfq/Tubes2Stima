@@ -10,6 +10,14 @@ class Graph{
     static List<(int, int)> eL;
     static Dictionary<char, int> SimpulInt;
     static LinkedList<int>[] _adj; 
+    //INI
+    static string[] lines, line;
+    static char[] simpulArray;
+    static List<(int, char)> simpulAngka;
+    static List<char> uniqueList;
+    static int namaAkunInt, namaExploreInt, i, j;
+	static int[] succ, pred;
+    static char namaAkun, namaExplore;
 
     public Graph(int V) {
         _adj = new LinkedList<int>[V];
@@ -18,7 +26,7 @@ class Graph{
         }
         nVertices = V;
     }
-    public void AddEdge(int v, int w) {		 
+    public void AddEdge1(int v, int w) {		 
         _adj[v].AddLast(w);
     }
     public void BFS(int s){ 
@@ -46,14 +54,7 @@ class Graph{
             }
         }
     }
-
     static void InputInt(){
-        string[] lines, line;
-        char[] simpulArray;
-        char namaAkun, namaExplore;
-        List<(int, char)> simpulAngka;
-        List<char> uniqueList;
-
         lines = System.IO.File.ReadAllLines("input.txt");
         simpulAngka = new List<(int, char)>();
         uniqueList = new List<char>();
@@ -66,8 +67,8 @@ class Graph{
             Console.WriteLine(items); */
             char u = lines[i][0];
             string v = line[1];
-            /*System.Console.WriteLine("Simpul Asal   : " + u);
-            System.Console.WriteLine("Simpul Tujuan : " + v); */
+            // System.Console.WriteLine("Simpul Asal   : " + u);
+            // System.Console.WriteLine("Simpul Tujuan : " + v);
             simpul.Add(u);
             simpul.Add(v[0]);
             //Console.WriteLine(simpul[i] + "{0}", i); 
@@ -85,7 +86,7 @@ class Graph{
         string s_lines = string.Join(",", lines);
         Console.WriteLine(s_lines); */
 
-        //INI SIMPUL BROK
+        //INI SIMPUL
         simpulArray = uniqueList.ToArray(); //INI ABJAD
         //Console.WriteLine(simpulArray);
         Array.Sort(simpulArray);
@@ -111,9 +112,9 @@ class Graph{
         SimpulInt = new Dictionary<char, int>();
         for (int i = 0; i < nVertices; i++){
             line = lines[i].Split(' ');
-            SimpulInt[simpulArray[i]] = i+1;
-            Console.Write(SimpulInt[simpulArray[i]] + " "); // ini dalam bentuk integer
-            Console.WriteLine(simpulArray[i]); // ini abjadnya
+            SimpulInt[simpulArray[i]] = i;
+            // Console.Write(SimpulInt[simpulArray[i]] + " "); // ini dalam bentuk integer
+            // Console.WriteLine(simpulArray[i]); // ini abjadnya
         }
 
         //char awal = simpulArray[0];
@@ -136,11 +137,10 @@ class Graph{
             //Console.WriteLine("ini u : " + a);
             //Console.WriteLine("ini v : " + b);
         }
-        foreach((int a, int b) in eL){
-             Console.WriteLine(a + " -> " + b);
-        } 
+        // foreach((int a, int b) in eL){
+        //      Console.WriteLine(a + " -> " + b);
+        // } 
     }
-
     static void InputChar(){
         string[] lines, line;
         char[] simpulArray;
@@ -184,9 +184,9 @@ class Graph{
             //Console.Write("{0}", simpulArrayHuruf + " = " + simpulArray[i]);
         }
 
-        foreach (var a in simpulAngka){
-            Console.WriteLine(a);
-        }
+        // foreach (var a in simpulAngka){
+        //     Console.WriteLine(a);
+        // }
                 
         // foreach (var a in edgeList){
         //     Console.WriteLine(a);
@@ -194,15 +194,11 @@ class Graph{
         //     Console.WriteLine(a.Item2);
         // }
 
-        foreach ((char a, string b) in edgeList){
-            Console.WriteLine(a + " -> " + b);
-        }
+        // foreach ((char a, string b) in edgeList){
+        //     Console.WriteLine(a + " -> " + b);
+        // }
     }
-
     static void ExploreFriends() {
-        char namaAkun, namaExplore;
-
-        Console.WriteLine();
         Console.Write("Choose Account : ");
         namaAkun = Console.ReadLine()[0];
 
@@ -210,74 +206,116 @@ class Graph{
         namaExplore = Console.ReadLine()[0];
         Console.WriteLine();
 
-
-        Boolean found1 = false; 
-        Boolean found2 = false;
-        foreach ((char a, string b) in edgeList){
-            if ((namaAkun == a) || (namaAkun == b[0])){
-                found1 = true;
-                //System.Console.WriteLine("ini namaAkun Sama : " + namaAkun);
+        for (int i = 1; i <= nEdges; i++){
+            line = lines[i].Split(' ');
+            if (namaAkun == lines[i][0]){
+                namaAkunInt = SimpulInt[lines[i][0]];
             }
-            if ((namaExplore == a) || (namaExplore == b[0])){
-                found2 = true;
-                //System.Console.WriteLine("ini namaExplore Sama : " + namaExplore);
+            if (namaExplore == line[1][0]){
+                namaExploreInt = SimpulInt[line[1][0]];
             }
         }
-
-        if (found1 && found2){
-            System.Console.WriteLine("Nama Akun : " + namaAkun + " dan " + namaExplore);
-            System.Console.WriteLine("Ini Ada 2 2 nya");
-            System.Console.WriteLine(namaAkun + "->" + namaExplore);
-        }
-        else{
-            System.Console.WriteLine("Nama Akun : " + namaAkun + " dan " + namaExplore);
+    }
+     private static void addEdge(List<List<int>> adj, int i, int j){
+		adj[i].Add(j);
+		adj[j].Add(i);
+	}
+	private static void printShortestDistance(List<List<int>> adj) {
+		pred = new int[nVertices];
+		succ = new int[nVertices];
+		
+		Console.WriteLine("Nama akun: " + namaAkun + " dan " + namaExplore);
+		if (BFS(adj) == false) {
             System.Console.WriteLine("Tidak ada jalur koneksi yang tersedia");
             System.Console.WriteLine("Anda harus memulai koneksi baru itu sendiri.");
+			return;
+		}
+		
+		List<int> path = new List<int>();
+		int crawl = namaExploreInt;
+		path.Add(crawl);
+		
+		while (pred[crawl] != -1){
+			path.Add(pred[crawl]);
+			crawl = pred[crawl];
+		}
+		
+		if (succ[namaExploreInt] == 1){
+            System.Console.WriteLine(succ[namaExploreInt]-1 + "st-degree connection");
         }
-    }
-
-    static void ABFS(int jarak) {
-        if (jarak == 1){
-            System.Console.WriteLine(jarak + "st-degree connection");
-        }
-        else if (jarak == 2){
-            System.Console.WriteLine(jarak + "nd-degree connection");
+        else if (succ[namaExploreInt] == 2){
+            System.Console.WriteLine(succ[namaExploreInt]-1 + "nd-degree connection");
         }
         else{
-            System.Console.WriteLine(jarak + "th-degree connection");
+            System.Console.WriteLine(succ[namaExploreInt]-1 + "th-degree connection");
         }
-        
-        // foreach (var a in edgeList){
-        //     Console.WriteLine(a);
-        //     isisimpul1 = a.Item1;
-        //     string isisimpul2 = a.Item2;
-            //Console.WriteLine(a.Item1);
-            //Console.WriteLine(a.Item2);
-        //}
-        //Console.WriteLine(isisimpul1);
+        // if (namaAkun == lines[i][0]){A == A -> lines[i][0] = abjad
+        //         namaAkunInt = SimpulInt[lines[i][0]]; -> integer
+        //     }
+		for (i = path.Count - 1; i >= 0; i--) {
+			if (path[i] == namaExploreInt){
+				Console.Write(path[i]);
+				break;
+			}
+			Console.Write(path[i] + " -> ");
+		}
+	}
+	private static bool BFS(List<List<int>> adj) {
+		List<int> queue = new List<int>();
+		bool []visited = new bool[nVertices];
+		
+		for (int i = 0; i < nVertices; i++){
+			visited[i] = false;
+			succ[i] = int.MaxValue;
+			pred[i] = -1;
+		}
 
-
-    }
- 
-    static void Main(string[] args) {
-        //BFS(5);
+		visited[namaAkunInt] = true;
+		succ[namaAkunInt] = 0;
+		queue.Add(namaAkunInt);
+		
+		while (queue.Count != 0){
+			j = queue[0];
+			queue.RemoveAt(0);
+			
+			for (i = 0; i < adj[j].Count; i++){
+				if (visited[adj[j][i]] == false){
+					visited[adj[j][i]] = true;
+					succ[adj[j][i]] = succ[j] + 1;
+					pred[adj[j][i]] = j;
+					queue.Add(adj[j][i]);
+			
+					if (adj[j][i] == namaExploreInt)
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+     static void Main(string[] args) {
         InputInt();
         Graph g = new Graph(nVertices);
-        Console.WriteLine(nVertices);
+        //Console.WriteLine(nVertices);
+
+        // foreach((int a, int b) in eL){
+        //     Console.WriteLine(a + " -> " + b);
+        //     g.AddEdge1(a-1 ,b-1);
+        // }
+
+        ExploreFriends();
+		
+		List<List<int>> adj = new List<List<int>>(nVertices);
+		
+		for (i = 0; i < nVertices; i++){
+			adj.Add(new List<int>());
+		}
 
         foreach((int a, int b) in eL){
-            Console.WriteLine(a + " -> " + b);
-            g.AddEdge(a-1 ,b-1);
+            //Console.WriteLine(a + " -> " + b);
+            addEdge(adj, a, b);
         }
+		printShortestDistance(adj);
 
-        /* Cek isi _adj
-        for(int i=0; i<nVertices; i++ ){
-            foreach (var vertice in _adj[i]) {
-                Console.Write(vertice);
-            }            
-            Console.WriteLine();
-        } */
-        //g.BFS(2);
-                
+                     
     }
 }
