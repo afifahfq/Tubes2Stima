@@ -18,6 +18,8 @@ namespace Tubes2Stima{
             public static int namaAkunInt, namaExploreInt, i, j;
             public static int[] succ, pred;
             public static char namaAkun, namaExplore;
+            public static Dictionary<char, string> mutuals, sortedMutuals;
+            public static List<int> myFriends, currFriends;
             
             public static void InputInt(){
                 lines = System.IO.File.ReadAllLines("input.txt");
@@ -313,7 +315,102 @@ namespace Tubes2Stima{
                         }
                     }
                 }
+                FriendsRecom(adj);
                 
+            }
+            public static void FriendsRecom(List<List<int>> adj) {
+                myFriends = new List<int>();
+                bool[] visited = new bool[Tubes2Stima.nVertices];
+                mutuals = new Dictionary<char, string>();
+
+                myFriends.AddRange(adj[Tubes2Stima.namaAkunInt]);
+                /*string items = string.Join(",", myFriends);
+                Console.WriteLine("my" + items); */
+                
+                Console.WriteLine();
+                Console.WriteLine("Friends Recommendation for " + Tubes2Stima.namaAkun + " :");
+
+                foreach (var friend in myFriends) {
+                    if (visited[friend] == false /*&& myFriends.Contains(friend)==false*/) {
+                        visited[friend] = true;
+                        var currKey = Tubes2Stima.SimpulInt.FirstOrDefault(x => x.Value == friend).Key;
+                
+                        foreach(var vertice in adj[friend]) {
+                            if (vertice != Tubes2Stima.namaAkunInt && myFriends.Contains(vertice)==false && visited[vertice]==false) {
+                                visited[vertice] = true;
+                                getMutuals(adj, vertice);
+                            }
+                        }
+                    }
+                }
+
+                Boolean found = false;
+                foreach(var i in mutuals) {
+                    if (i.Key == Tubes2Stima.namaExplore) {
+                        found = true;
+                    }
+                }
+
+                if (!found) {
+                    currFriends = new List<int>();
+                    currFriends.AddRange(adj[Tubes2Stima.namaExploreInt]);
+
+                    var currMutuals = myFriends.Intersect(currFriends).ToList();  
+                    //currMutuals = currMutuals.Except(myFriends);
+
+                    List<char> convertedMutuals = new List<char>();
+                    foreach (var i in currMutuals) {
+                        var currKey = Tubes2Stima.SimpulInt.FirstOrDefault(x => x.Value == i).Key;
+                        convertedMutuals.Add(currKey);
+                    }
+
+                    string items = string.Join(",", convertedMutuals);
+
+                    mutuals.Add(Tubes2Stima.namaExplore, items);
+                }
+                Console.WriteLine(Tubes2Stima.namaExplore); 
+                Console.WriteLine(countVertices(mutuals[Tubes2Stima.namaExplore]) + " Mutual Friends : " + mutuals[Tubes2Stima.namaExplore]);
+
+                var sortedMutuals = mutuals.OrderByDescending(i => i.Value.Length);
+
+                foreach((char key, string value) in sortedMutuals) {
+                    if (key != Tubes2Stima.namaExplore) {
+                        Console.WriteLine(key);
+                        Console.WriteLine(countVertices(value) + " Mutual Friends : " + value);
+                    }
+                }
+
+            }
+
+            public static void getMutuals(List<List<int>> adj, int vertice) {
+                currFriends = new List<int>();
+                currFriends.AddRange(adj[vertice]);
+
+                var currV = Tubes2Stima.SimpulInt.FirstOrDefault(x => x.Value == vertice).Key;
+
+                var currMutuals = myFriends.Intersect(currFriends).ToList();  
+                //currMutuals = currMutuals.Except(myFriends);
+
+                List<char> convertedMutuals = new List<char>();
+                foreach (var i in currMutuals) {
+                    var currKey = Tubes2Stima.SimpulInt.FirstOrDefault(x => x.Value == i).Key;
+                    convertedMutuals.Add(currKey);
+                }
+
+                string items = string.Join(",", convertedMutuals);
+
+                mutuals.Add(currV, items);
+            }
+
+            public static int countVertices(string s) {
+                int i = 0;
+
+                for (int j=0; j<s.Length; j++) {
+                    if (s[j] != ',') {
+                        i++;
+                    }
+                }
+                return i;
             }
         }
 
@@ -377,6 +474,8 @@ namespace Tubes2Stima{
                     }
                 }
             }
+            
+
         }  
         
         class utama{
