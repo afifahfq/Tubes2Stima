@@ -1,5 +1,3 @@
-// C# program to print BFS traversal 
-// from a given source vertex. 
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +5,7 @@ using System.Linq;
 namespace Tubes2Stima{
     public class program{
         public class Tubes2Stima{
-            public static int nEdges, nVertices;
+            public static int nEdges, nVertices, count, namaAkunInt, namaExploreInt, uAngka, vAngka, i, j;
             public static List<(char, string)> edgeList;
             public static List<(int, int)> eL;
             public static Dictionary<char, int> SimpulInt;
@@ -15,11 +13,11 @@ namespace Tubes2Stima{
             public static char[] simpulArray;
             public static List<(int, char)> simpulAngka;
             public static List<char> uniqueList;
-            public static int namaAkunInt, namaExploreInt, i, j;
             public static int[] succ, pred;
             public static char namaAkun, namaExplore;
             public static Dictionary<char, string> mutuals, sortedMutuals;
             public static List<int> myFriends, currFriends;
+            public static List<int>[] adj1;
             
             public static void InputInt(){
                 lines = System.IO.File.ReadAllLines("input.txt");
@@ -93,8 +91,7 @@ namespace Tubes2Stima{
                 //int m = Int32.Parse(line[0]); // 13, m = nEdges
                 eL = new List<(int, int)>();
 
-                int uAngka;
-                int vAngka;
+                
                 for (int i = 1; i <= nEdges; i++){
                     line = lines[i].Split(' ');
                     uAngka = SimpulInt[lines[i][0]];
@@ -169,6 +166,56 @@ namespace Tubes2Stima{
                 adj[v].Add(w);
                 adj[w].Add(v);
             }
+            public static void addEdge1(List<int>[] adj1, int v, int w){
+                adj1[v].Add(w);
+            }
+            public static void exploreFriendUsingDFS(List<int>[] adj1, int v, bool[] visited){
+                visited[v] = true;
+                if (v == namaExploreInt){
+                    Console.WriteLine(Tubes2Stima.namaExplore);
+                    if (count == 0){
+                        System.Console.WriteLine("No-degree connection");
+                    }
+                    else if (count == 1){
+                        System.Console.WriteLine(count + "st-degree connection");
+                    }
+                    else if (count == 2){
+                        System.Console.WriteLine(count + "nd-degree connection");
+                    }
+                    else{
+                        System.Console.WriteLine(count + "th-degree connection");
+                    }
+                    for (i = 0; i < nVertices; ++i){
+                        visited[i] = true;
+                    }
+                }
+                else{
+                    if (v == namaAkunInt){
+                        Console.Write(namaAkun + " -> ");
+                    }
+                    else{
+                        for (int j = 0; j < nVertices; j++){
+                            if (v == SimpulInt[simpulArray[j]]){
+                                Console.Write(simpulArray[j] + " -> ");
+                                count += 1;
+                            }
+                        }
+                    }
+                    foreach(int i in adj1[v]){
+                        if (!visited[i]){
+                            exploreFriendUsingDFS(adj1, i, visited);
+                        }
+                    }
+                }
+            }
+            public static void DFS(List<int>[] adj1){
+                bool[] visited = new bool[nVertices];
+                for (i = 0; i < nVertices; ++i){
+                    if (!visited[i]){
+                        exploreFriendUsingDFS(adj1, i, visited);
+                    }
+                }
+            }
             public static void exploreFriendUsingBFS(List<List<int>> adj) {
                 int tempNamaExploreInt;
 
@@ -191,7 +238,7 @@ namespace Tubes2Stima{
                     }
                     
                     if (succ[namaExploreInt] == 1){
-                        System.Console.WriteLine("No-degree connection");
+                        System.Console.WriteLine("0-degree connection");
                     }
                     else if (succ[namaExploreInt] == 2){
                         System.Console.WriteLine(succ[namaExploreInt]-1 + "st-degree connection");
@@ -202,18 +249,20 @@ namespace Tubes2Stima{
                     else{
                         System.Console.WriteLine(succ[namaExploreInt]-1 + "th-degree connection");
                     }
+
                     for(i = path.Count - 1; i >= 0; i--){
-                        if (path[i] == namaExploreInt){
-                            Console.WriteLine(namaExplore);
-                            break;
-                        }
-                        else if (path[i] == namaAkunInt){
-                            Console.Write(namaAkun + " -> ");
-                        }
-                        else{
-                            for (int j = 0; j < nVertices; j++){
-                                if (path[i] == SimpulInt[simpulArray[j]]){
-                                    Console.Write(simpulArray[j] + " -> ");
+                        if (namaAkunInt < namaExploreInt){
+                            if (path[i] == namaExploreInt){
+                                Console.WriteLine(namaExplore);
+                            }
+                            else if (path[i] == namaAkunInt){
+                                Console.Write(namaAkun + " -> ");
+                            }
+                            else{
+                                for (int j = 0; j < nVertices; j++){
+                                    if (path[i] == SimpulInt[simpulArray[j]]){
+                                        Console.Write(simpulArray[j] + " -> ");
+                                    }
                                 }
                             }
                         }
@@ -224,7 +273,7 @@ namespace Tubes2Stima{
                 List<int> queue = new List<int>();
                 bool []visited = new bool[nVertices];
                 
-                for (int i = 0; i < nVertices; i++){
+                for (i = 0; i < nVertices; i++){
                     visited[i] = false;
                     succ[i] = int.MaxValue;
                     pred[i] = -1;
@@ -255,6 +304,7 @@ namespace Tubes2Stima{
             public static void InputAkun() {
                 int pilih;
                 List<List<int>> adj = new List<List<int>>(nVertices);
+                List<int>[] adj1 = new List<int>[nVertices];
                 
                 for (i = 0; i < nVertices; i++){
                     adj.Add(new List<int>());
@@ -264,6 +314,7 @@ namespace Tubes2Stima{
                     //Console.WriteLine(a + " -> " + b);
                     addEdge(adj, a, b);
                 }
+
                 Console.Write("Choose Account : ");
                 namaAkun = Console.ReadLine()[0];
 
@@ -275,11 +326,14 @@ namespace Tubes2Stima{
                     line = lines[i].Split(' ');
                     if (namaAkun == lines[i][0]){
                         namaAkunInt = SimpulInt[lines[i][0]];
+                        //Console.WriteLine("NA : " + namaAkun + namaAkunInt);
                     }
                     if (namaExplore == line[1][0]){
                         namaExploreInt = SimpulInt[line[1][0]];
+                        //Console.WriteLine("NE : " + namaExplore + namaExploreInt);
                     }
                 }
+                
 
                 Console.Write("Pencarian Dengan : \n1. BFS \n2. DFS \nMasukkan nomor pilihan :  ");
                 pilih = Int32.Parse(Console.ReadLine());
@@ -288,11 +342,15 @@ namespace Tubes2Stima{
                     exploreFriendUsingBFS(adj);
                 }
                 else if (pilih == 2){
-                    Graph g = new Graph(nVertices);
-                    foreach((int a, int b) in eL){
-                        g.addEdge(a, b);
+                    adj1 = new List<int>[nVertices];
+                    for (i = 0; i < nVertices; ++i){
+                        adj1[i] = new List<int>();
                     }
-                    g.DFS();
+                    foreach((int a, int b) in eL){
+                        addEdge1(adj1, a, b);
+                    }
+
+                    DFS(adj1);
                 }
                 else{
                     Boolean found = false;
@@ -305,13 +363,15 @@ namespace Tubes2Stima{
                             exploreFriendUsingBFS(adj);
                         }
                         if (pilih == 2){
-                            found = true;
-                            Console.WriteLine();
-                            Graph g = new Graph(nVertices);
-                            foreach((int a, int b) in eL){
-                                g.addEdge(a, b);
+                            adj1 = new List<int>[nVertices];
+                            for (i = 0; i < nVertices; ++i){
+                                adj1[i] = new List<int>();
                             }
-                            g.DFS();
+                            foreach((int a, int b) in eL){
+                                addEdge1(adj1, a, b);
+                            }
+
+                            DFS(adj1);
                         }
                     }
                 }
@@ -320,23 +380,23 @@ namespace Tubes2Stima{
             }
             public static void FriendsRecom(List<List<int>> adj) {
                 myFriends = new List<int>();
-                bool[] visited = new bool[Tubes2Stima.nVertices];
+                bool[] visited = new bool[nVertices];
                 mutuals = new Dictionary<char, string>();
 
-                myFriends.AddRange(adj[Tubes2Stima.namaAkunInt]);
+                myFriends.AddRange(adj[namaAkunInt]);
                 /*string items = string.Join(",", myFriends);
                 Console.WriteLine("my" + items); */
                 
                 Console.WriteLine();
-                Console.WriteLine("Friends Recommendation for " + Tubes2Stima.namaAkun + " :");
+                Console.WriteLine("Friends Recommendation for " + namaAkun + " :");
 
                 foreach (var friend in myFriends) {
                     if (visited[friend] == false /*&& myFriends.Contains(friend)==false*/) {
                         visited[friend] = true;
-                        var currKey = Tubes2Stima.SimpulInt.FirstOrDefault(x => x.Value == friend).Key;
+                        var currKey = SimpulInt.FirstOrDefault(x => x.Value == friend).Key;
                 
                         foreach(var vertice in adj[friend]) {
-                            if (vertice != Tubes2Stima.namaAkunInt && myFriends.Contains(vertice)==false && visited[vertice]==false) {
+                            if (vertice != namaAkunInt && myFriends.Contains(vertice)==false && visited[vertice]==false) {
                                 visited[vertice] = true;
                                 getMutuals(adj, vertice);
                             }
@@ -346,54 +406,53 @@ namespace Tubes2Stima{
 
                 Boolean found = false;
                 foreach(var i in mutuals) {
-                    if (i.Key == Tubes2Stima.namaExplore) {
+                    if (i.Key == namaExplore) {
                         found = true;
                     }
                 }
 
                 if (!found) {
                     currFriends = new List<int>();
-                    currFriends.AddRange(adj[Tubes2Stima.namaExploreInt]);
+                    currFriends.AddRange(adj[namaExploreInt]);
 
                     var currMutuals = myFriends.Intersect(currFriends).ToList();  
                     //currMutuals = currMutuals.Except(myFriends);
 
                     List<char> convertedMutuals = new List<char>();
                     foreach (var i in currMutuals) {
-                        var currKey = Tubes2Stima.SimpulInt.FirstOrDefault(x => x.Value == i).Key;
+                        var currKey = SimpulInt.FirstOrDefault(x => x.Value == i).Key;
                         convertedMutuals.Add(currKey);
                     }
 
                     string items = string.Join(",", convertedMutuals);
 
-                    mutuals.Add(Tubes2Stima.namaExplore, items);
+                    mutuals.Add(namaExplore, items);
                 }
-                Console.WriteLine(Tubes2Stima.namaExplore); 
-                Console.WriteLine(countVertices(mutuals[Tubes2Stima.namaExplore]) + " Mutual Friends : " + mutuals[Tubes2Stima.namaExplore]);
+                Console.WriteLine(namaExplore); 
+                Console.WriteLine(countVertices(mutuals[namaExplore]) + " Mutual Friends : " + mutuals[namaExplore]);
 
                 var sortedMutuals = mutuals.OrderByDescending(i => i.Value.Length);
 
                 foreach((char key, string value) in sortedMutuals) {
-                    if (key != Tubes2Stima.namaExplore) {
+                    if (key != namaExplore) {
                         Console.WriteLine(key);
                         Console.WriteLine(countVertices(value) + " Mutual Friends : " + value);
                     }
                 }
 
             }
-
             public static void getMutuals(List<List<int>> adj, int vertice) {
                 currFriends = new List<int>();
                 currFriends.AddRange(adj[vertice]);
 
-                var currV = Tubes2Stima.SimpulInt.FirstOrDefault(x => x.Value == vertice).Key;
+                var currV = SimpulInt.FirstOrDefault(x => x.Value == vertice).Key;
 
                 var currMutuals = myFriends.Intersect(currFriends).ToList();  
                 //currMutuals = currMutuals.Except(myFriends);
 
                 List<char> convertedMutuals = new List<char>();
                 foreach (var i in currMutuals) {
-                    var currKey = Tubes2Stima.SimpulInt.FirstOrDefault(x => x.Value == i).Key;
+                    var currKey = SimpulInt.FirstOrDefault(x => x.Value == i).Key;
                     convertedMutuals.Add(currKey);
                 }
 
@@ -401,7 +460,6 @@ namespace Tubes2Stima{
 
                 mutuals.Add(currV, items);
             }
-
             public static int countVertices(string s) {
                 int i = 0;
 
@@ -412,72 +470,8 @@ namespace Tubes2Stima{
                 }
                 return i;
             }
-        }
-
-        class Graph {
-            public List<int>[] adj;
-            public static int i, count;
-            public Graph(int v){
-                Tubes2Stima.nVertices = v;
-                adj = new List<int>[ v ];
-                for (i = 0; i < v; ++i){
-                    adj[i] = new List<int>();
-                }
-            }
-            public void addEdge(int v, int w){
-                adj[v].Add(w);
-            }
-            public void exploreFriendUsingDFS(int v, bool[] visited){
-                visited[v] = true;
-                if (v == Tubes2Stima.namaExploreInt){
-                    Console.WriteLine(Tubes2Stima.namaExplore);
-                    if (count == 0){
-                        System.Console.WriteLine("No-degree connection");
-                    }
-                    else if (count == 1){
-                        System.Console.WriteLine(count + "st-degree connection");
-                    }
-                    else if (count == 2){
-                        System.Console.WriteLine(count + "nd-degree connection");
-                    }
-                    else{
-                        System.Console.WriteLine(count + "th-degree connection");
-                    }
-                    for (i = 0; i < Tubes2Stima.nVertices; ++i){
-                        visited[i] = true;
-                    }
-                }
-                else{
-                    if (v == Tubes2Stima.namaAkunInt){
-                        Console.Write(Tubes2Stima.namaAkun + " -> ");
-                    }
-                    else{
-                        for (int j = 0; j < Tubes2Stima.nVertices; j++){
-                            if (v == Tubes2Stima.SimpulInt[Tubes2Stima.simpulArray[j]]){
-                                Console.Write(Tubes2Stima.simpulArray[j] + " -> ");
-                                count += 1;
-                            }
-                        }
-                    }
-                    foreach(int i in adj[v]){
-                        if (!visited[i]){
-                            exploreFriendUsingDFS(i, visited);
-                        }
-                    }
-                }
-            }
-            public void DFS(){
-                bool[] visited = new bool[Tubes2Stima.nVertices];
-                for (i = 0; i < Tubes2Stima.nVertices; ++i){
-                    if (!visited[i]){
-                        exploreFriendUsingDFS(i, visited);
-                    }
-                }
-            }
             
-
-        }  
-        
+        }
         class utama{
             public static void Main(String[] args){
                 Tubes2Stima.InputInt();
