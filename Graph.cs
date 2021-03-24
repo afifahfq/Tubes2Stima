@@ -198,67 +198,60 @@ class Graph{
         //     Console.WriteLine(a + " -> " + b);
         // }
     }
-    static void ExploreFriends() {
-        Console.Write("Choose Account : ");
-        namaAkun = Console.ReadLine()[0];
-
-        Console.Write("Explore friends with : ");
-        namaExplore = Console.ReadLine()[0];
-        Console.WriteLine();
-
-        for (int i = 1; i <= nEdges; i++){
-            line = lines[i].Split(' ');
-            if (namaAkun == lines[i][0]){
-                namaAkunInt = SimpulInt[lines[i][0]];
-            }
-            if (namaExplore == line[1][0]){
-                namaExploreInt = SimpulInt[line[1][0]];
-            }
-        }
-    }
-     private static void addEdge(List<List<int>> adj, int i, int j){
-		adj[i].Add(j);
-		adj[j].Add(i);
+    private static void addEdge(List<List<int>> adj, int v, int w){
+		adj[v].Add(w);
+		adj[w].Add(v);
 	}
-	private static void printShortestDistance(List<List<int>> adj) {
+	private static void exploreFriendBFS(List<List<int>> adj) {
+        int tempNamaExploreInt;
+
 		pred = new int[nVertices];
 		succ = new int[nVertices];
 		
-		Console.WriteLine("Nama akun: " + namaAkun + " dan " + namaExplore);
+		Console.WriteLine("\nNama akun: " + namaAkun + " dan " + namaExplore);
 		if (BFS(adj) == false) {
             System.Console.WriteLine("Tidak ada jalur koneksi yang tersedia");
             System.Console.WriteLine("Anda harus memulai koneksi baru itu sendiri.");
-			return;
 		}
-		
-		List<int> path = new List<int>();
-		int crawl = namaExploreInt;
-		path.Add(crawl);
-		
-		while (pred[crawl] != -1){
-			path.Add(pred[crawl]);
-			crawl = pred[crawl];
-		}
-		
-		if (succ[namaExploreInt] == 1){
-            System.Console.WriteLine(succ[namaExploreInt]-1 + "st-degree connection");
+        else{		
+            List<int> path = new List<int>();
+            tempNamaExploreInt = namaExploreInt;
+            path.Add(tempNamaExploreInt);
+            
+            while (pred[tempNamaExploreInt] != -1){
+                path.Add(pred[tempNamaExploreInt]);
+                tempNamaExploreInt = pred[tempNamaExploreInt];
+            }
+            
+            if (succ[namaExploreInt] == 1){
+                System.Console.WriteLine("No-degree connection");
+            }
+            else if (succ[namaExploreInt] == 2){
+                System.Console.WriteLine(succ[namaExploreInt]-1 + "st-degree connection");
+            }
+            else if (succ[namaExploreInt] == 3){
+                System.Console.WriteLine(succ[namaExploreInt]-1 + "nd-degree connection");
+            }
+            else{
+                System.Console.WriteLine(succ[namaExploreInt]-1 + "th-degree connection");
+            }
+            for(i = path.Count - 1; i >= 0; i--){
+                if (path[i] == namaExploreInt){
+                    Console.WriteLine(namaExplore);
+                    break;
+                }
+                else if (path[i] == namaAkunInt){
+                    Console.Write(namaAkun + " -> ");
+                }
+                else{
+                    for (int j = 0; j < nVertices; j++){
+                        if (path[i] == SimpulInt[simpulArray[j]]){
+                            Console.Write(simpulArray[j] + " -> ");
+                        }
+                    }
+                }
+            }
         }
-        else if (succ[namaExploreInt] == 2){
-            System.Console.WriteLine(succ[namaExploreInt]-1 + "nd-degree connection");
-        }
-        else{
-            System.Console.WriteLine(succ[namaExploreInt]-1 + "th-degree connection");
-        }
-        // if (namaAkun == lines[i][0]){A == A -> lines[i][0] = abjad
-        //         namaAkunInt = SimpulInt[lines[i][0]]; -> integer
-        //     }
-		for (i = path.Count - 1; i >= 0; i--) {
-			if (path[i] == namaExploreInt){
-				Console.Write(path[i]);
-				break;
-			}
-			Console.Write(path[i] + " -> ");
-		}
 	}
 	private static bool BFS(List<List<int>> adj) {
 		List<int> queue = new List<int>();
@@ -292,19 +285,9 @@ class Graph{
 		}
 		return false;
 	}
-     static void Main(string[] args) {
-        InputInt();
-        Graph g = new Graph(nVertices);
-        //Console.WriteLine(nVertices);
-
-        // foreach((int a, int b) in eL){
-        //     Console.WriteLine(a + " -> " + b);
-        //     g.AddEdge1(a-1 ,b-1);
-        // }
-
-        ExploreFriends();
-		
-		List<List<int>> adj = new List<List<int>>(nVertices);
+    static void InputAkun() {
+        int pilih;
+        List<List<int>> adj = new List<List<int>>(nVertices);
 		
 		for (i = 0; i < nVertices; i++){
 			adj.Add(new List<int>());
@@ -314,8 +297,48 @@ class Graph{
             //Console.WriteLine(a + " -> " + b);
             addEdge(adj, a, b);
         }
-		printShortestDistance(adj);
+        Console.Write("Choose Account : ");
+        namaAkun = Console.ReadLine()[0];
 
-                     
+        Console.Write("Explore friends with : ");
+        namaExplore = Console.ReadLine()[0];
+        Console.WriteLine();
+
+        for (int i = 1; i <= nEdges; i++){
+            line = lines[i].Split(' ');
+            if (namaAkun == lines[i][0]){
+                namaAkunInt = SimpulInt[lines[i][0]];
+            }
+            if (namaExplore == line[1][0]){
+                namaExploreInt = SimpulInt[line[1][0]];
+            }
+        }
+
+        Console.Write("Pencarian Dengan : \n1. BFS \n2. DFS \nMasukkan nomor pilihan :  ");
+        pilih = Int32.Parse(Console.ReadLine());
+
+        if (pilih == 1){
+            exploreFriendBFS(adj);
+        }
+        else if (pilih == 2){
+            Console.WriteLine();
+        }
+        else{
+            Console.WriteLine("Input Salah! \nSilahkan Masukkan ulang pilihan : ");
+            pilih = Int32.Parse(Console.ReadLine());
+        }
+        
+    }
+    static void Main(string[] args) {
+        InputInt();
+        Graph g = new Graph(nVertices);
+        //Console.WriteLine(nVertices);
+
+        // foreach((int a, int b) in eL){
+        //     Console.WriteLine(a + " -> " + b);
+        //     g.AddEdge1(a, b);
+        // }
+
+        InputAkun();                     
     }
 }
