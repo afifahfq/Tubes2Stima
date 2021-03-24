@@ -227,47 +227,47 @@ namespace Tubes2Stima{
                     System.Console.WriteLine("Tidak ada jalur koneksi yang tersedia");
                     System.Console.WriteLine("Anda harus memulai koneksi baru itu sendiri.");
                 }
-                else{		
-                    List<int> path = new List<int>();
-                    tempNamaExploreInt = namaExploreInt;
-                    path.Add(tempNamaExploreInt);
-                    
-                    while (pred[tempNamaExploreInt] != -1){
-                        path.Add(pred[tempNamaExploreInt]);
-                        tempNamaExploreInt = pred[tempNamaExploreInt];
-                    }
-                    
-                    if (succ[namaExploreInt] == 1){
-                        System.Console.WriteLine("0-degree connection");
-                    }
-                    else if (succ[namaExploreInt] == 2){
-                        System.Console.WriteLine(succ[namaExploreInt]-1 + "st-degree connection");
-                    }
-                    else if (succ[namaExploreInt] == 3){
-                        System.Console.WriteLine(succ[namaExploreInt]-1 + "nd-degree connection");
-                    }
-                    else{
-                        System.Console.WriteLine(succ[namaExploreInt]-1 + "th-degree connection");
-                    }
+                	
+                List<int> path = new List<int>();
+                tempNamaExploreInt = 7;
+                path.Add(tempNamaExploreInt);
+                
+                while (pred[tempNamaExploreInt] != -1){
+                    path.Add(pred[tempNamaExploreInt]);
+                    tempNamaExploreInt = pred[tempNamaExploreInt];
+                }
+                
+                if (succ[namaExploreInt] == 1){
+                    System.Console.WriteLine("0-degree connection");
+                }
+                else if (succ[namaExploreInt] == 2){
+                    System.Console.WriteLine(succ[namaExploreInt]-1 + "st-degree connection");
+                }
+                else if (succ[namaExploreInt] == 3){
+                    System.Console.WriteLine(succ[namaExploreInt]-1 + "nd-degree connection");
+                }
+                else{
+                    System.Console.WriteLine(succ[namaExploreInt]-1 + "th-degree connection");
+                }
 
-                    for(i = path.Count - 1; i >= 0; i--){
-                        if (namaAkunInt < namaExploreInt){
-                            if (path[i] == namaExploreInt){
-                                Console.WriteLine(namaExplore);
-                            }
-                            else if (path[i] == namaAkunInt){
-                                Console.Write(namaAkun + " -> ");
-                            }
-                            else{
-                                for (int j = 0; j < nVertices; j++){
-                                    if (path[i] == SimpulInt[simpulArray[j]]){
-                                        Console.Write(simpulArray[j] + " -> ");
-                                    }
+                for(i = path.Count - 1; i >= 0; i--){
+                    if (namaAkunInt < namaExploreInt){
+                        if (path[i] == namaExploreInt){
+                            Console.WriteLine(namaExplore);
+                        }
+                        else if (path[i] == namaAkunInt){
+                            Console.Write(namaAkun + " -> ");
+                        }
+                        else{
+                            for (int j = 0; j < nVertices; j++){
+                                if (path[i] == SimpulInt[simpulArray[j]]){
+                                    Console.Write(simpulArray[j] + " -> ");
                                 }
                             }
                         }
                     }
                 }
+                
             }
             public static bool BFS(List<List<int>> adj) {
                 List<int> queue = new List<int>();
