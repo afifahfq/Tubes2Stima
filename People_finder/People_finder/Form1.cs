@@ -13,9 +13,33 @@ namespace People_finder
 {
 	public partial class Form1 : Form
     {
-        // Controls 
-        private Button BrowseButton = new Button();
+        //Attributes
         private String FileName = "";
+        private int width = 500;
+        private int length = 600;
+
+        // Controls 
+
+        private Label Title = new Label {
+            Text = "People Finder",
+            Anchor = AnchorStyles.Top,
+            TextAlign = ContentAlignment.MiddleCenter,
+            Font = new Font("Arial", 10, FontStyle.Bold)
+            //Size = new Size(20, 20)
+        };
+        private Button BrowseButton = new Button
+        {
+            TextAlign = ContentAlignment.MiddleCenter,
+            Text = "Browse",
+            Location = new Point(10, 20),
+        };
+        private Label BrowseLabel = new Label
+        {
+            Text = "Browse : ",
+            Anchor = AnchorStyles.Top,
+            TextAlign = ContentAlignment.MiddleCenter,
+            //Size = new Size(20, 20)
+        };
 
         public Form1()
 		{
@@ -24,30 +48,53 @@ namespace People_finder
 
         private void Form1_Load(object sender, EventArgs e) {
             // Form Sizing 
-            const int width = 500;
-            const int length = 600;
-            this.Size = new Size(width, length);
+            this.MinimumSize = new Size(this.width, this.length);
+            this.AutoSize = true;
 
             // Random Codes i found on the internet 
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
+            this.MaximizeBox = true;
+            this.MinimizeBox = true;
             this.BackColor = Color.White;
             this.ForeColor = Color.Black;
             this.Text = "Run-time Controls";
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            // Attributes 
-            this.BrowseButton.Text = "Browse";
-            this.BrowseButton.Location = new System.Drawing.Point(10, 20);
+            // Controls
             this.BrowseButton.Click += browseFile;
 
             // Layout 
             TableLayoutPanel panel = new TableLayoutPanel();
-            panel.Location = new System.Drawing.Point(width / 2, length);
+            //panel.Location = new Point(50, 50);
+            panel.MinimumSize = new Size(width-100, length-100);
+            panel.AutoSize = true;
+            panel.CellBorderStyle = TableLayoutPanelCellBorderStyle.Outset;
+            panel.ColumnCount = 1;
+            panel.RowCount = 3;
+            panel.Padding = new Padding(50);
+            //panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+            //panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 52F));
+            //panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
+            //panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
+            //panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 38F));
+            //panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 8F));
 
+            TableLayoutPanel MainMenuPanel = new TableLayoutPanel
+            {
+                Padding = new Padding(10, 5, 10, 5),
+                RowCount = 2,
+                ColumnCount = 3,
+            };
 
-            this.Controls.Add(BrowseButton);
+            // Add Controls to MainMenuPanel
+            MainMenuPanel.Controls.Add(BrowseLabel, 0, 0);
+            MainMenuPanel.Controls.Add(BrowseButton, 1, 0);
+
+            // Add Controls to Layout
+            panel.Controls.Add(Title, 0, 0);
+            panel.Controls.Add(MainMenuPanel);
+
+            this.Controls.Add(panel);
         }
 
         public void browseFile(Object sender, EventArgs e)
@@ -74,7 +121,11 @@ namespace People_finder
             {
                 this.FileName = openFileDialog1.FileName;
             }
-            Console.WriteLine(this.FileName);
+        }
+
+        public void openFile()
+        {
+
         }
     }
 }
