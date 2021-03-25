@@ -436,21 +436,7 @@ namespace Tubes2Stima{
                 }
 
                 if (!found) {
-                    currFriends = new List<int>();
-                    currFriends.AddRange(adj[namaExploreInt]);
-
-                    var currMutuals = myFriends.Intersect(currFriends).ToList();  
-                    //currMutuals = currMutuals.Except(myFriends);
-
-                    List<char> convertedMutuals = new List<char>();
-                    foreach (var i in currMutuals) {
-                        var currKey = SimpulInt.FirstOrDefault(x => x.Value == i).Key;
-                        convertedMutuals.Add(currKey);
-                    }
-
-                    string items = string.Join(",", convertedMutuals);
-
-                    mutuals.Add(namaExplore, items);
+                    getMutuals(adj, Tubes2Stima.namaExploreInt);
                 }
                 Console.WriteLine(namaExplore); 
                 Console.WriteLine(countVertices(mutuals[namaExplore]) + " Mutual Friends : " + mutuals[namaExplore]);
