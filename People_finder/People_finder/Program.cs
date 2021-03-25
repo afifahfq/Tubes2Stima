@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace People_finder
 {
-	static class Program
+	static class BProgram
 	{
 		/// <summary>
 		/// The main entry point for the application.
@@ -14,7 +14,8 @@ namespace People_finder
 		[STAThread]
 		static void Main()
 		{
-			Application.EnableVisualStyles();
+            
+            Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new Form1());
 		}
