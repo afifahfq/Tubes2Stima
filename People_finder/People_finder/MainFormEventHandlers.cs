@@ -17,7 +17,7 @@ namespace People_finder
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
                 // Change this in the final commit 
-                InitialDirectory = @"E:\Project\College\Strategi Algoritma\Tugas Besar 2 - People You May Know",
+                InitialDirectory = @"D:\",
                 Title = "Browse Text Files To Turn Into Graphs",
 
                 CheckFileExists = true,
@@ -77,7 +77,7 @@ namespace People_finder
                 foreach (var connectedNode in connection)
                 {
                     this.visualizerGraph.AddEdge(node, connectedNode);
-                    //this.visualizerGraph.AddEdge(connectedNode, node);
+                    this.visualizerGraph.AddEdge(connectedNode, node);
                 }
             }
 
@@ -126,15 +126,23 @@ namespace People_finder
                 this.currentGraph.DFS();
                 if(this.currentGraph.hasilDFS[0].Item2 > 0)
                 {
-                    foreach (var item in this.currentGraph.hasilDFS[0].Item1)
+                    for (int i = 0; i < this.currentGraph.hasilDFS[0].Item1.Count(); i++)
                     {
-                        exploredText += item + " -> ";
+                        char item = this.currentGraph.hasilDFS[0].Item1[i];
+                        if ( i == this.currentGraph.hasilDFS[0].Item1.Count() - 1)
+                        {
+                            exploredText += item;
+                        } else
+                        {
+                            exploredText += item + " -> ";
+                        }
+                        
                     }
                     Degree = this.currentGraph.hasilDFS[0].Item2;
                 }
                 else
                 {
-                    exploredText = "Tidak ada jalur koneksi yang tersedia";
+                    exploredText = "Tidak ada jalur koneksi yang tersedia atau koneksi langsung";
                 }
 
             } else
@@ -142,14 +150,22 @@ namespace People_finder
                 this.currentGraph.exploreFriendUsingBFS();
                 if (this.currentGraph.hasilBFS[0].Item2 > 0)
                 {
-                    foreach (var item in this.currentGraph.hasilBFS[0].Item1)
+                    for (int i = 0; i < this.currentGraph.hasilBFS[0].Item1.Count(); i++)
                     {
-                        exploredText += item + " -> ";
+                        char item = this.currentGraph.hasilBFS[0].Item1[i];
+                        if (i == this.currentGraph.hasilBFS[0].Item1.Count() - 1)
+                        {
+                            exploredText += item;
+                        }
+                        else
+                        {
+                            exploredText += item + " -> ";
+                        }
                     }
+                    Degree = this.currentGraph.hasilBFS[0].Item2;
                 } else
                 {
-                    exploredText = "Tidak ada jalur koneksi yang tersedia";
-                    Degree = this.currentGraph.hasilBFS[0].Item2;
+                    exploredText = "Tidak ada jalur koneksi yang tersedia atau koneksi langsung";
                 }
             }
 
