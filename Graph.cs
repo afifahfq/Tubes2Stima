@@ -12,12 +12,13 @@ namespace Tubes2Stima{
             public static string[] lines, line;
             public static char[] simpulArray;
             public static List<(int, char)> simpulAngka;
-            public static List<char> uniqueList;
-            public static int[] succ, pred;
+            public static List<char> uniqueList, pathChar;
+            public static int[] degree, pred;
             public static char namaAkun, namaExplore;
             public static Dictionary<char, string> mutuals, sortedMutuals;
             public static List<int> myFriends, currFriends;
             public static List<int>[] adj1;
+            public static List<(List<char>, int)> hasil;
             
             public static void InputInt(){
                 lines = System.IO.File.ReadAllLines("input.txt");
@@ -70,8 +71,7 @@ namespace Tubes2Stima{
                     vAngka = SimpulInt[line[1][0]];
                     eL.Add((uAngka, vAngka));
                 }
-            }
-                     
+            }     
             public static void addEdge(List<List<int>> adj, int v, int w){
                 adj[v].Add(w);
                 adj[w].Add(v);
@@ -126,75 +126,68 @@ namespace Tubes2Stima{
                     }
                 }
             }
-            public static void exploreFriendUsingBFS(List<List<int>> adj) {
-                int tempNamaExploreInt;
+            public static List<(List<char>, int)> exploreFriendUsingBFS(List<List<int>> adj) {
+                List<int> pathInt = new List<int>();
+                List<char> pathChar = new List<char>();
+                List<(List<char>, int)> hasil = new List<(List<char>, int)>();
 
                 pred = new int[nVertices];
-                succ = new int[nVertices];
-                
-                Console.WriteLine("\nNama akun: " + namaAkun + " dan " + namaExplore);
+                degree = new int[nVertices];
+
+                // ATURAN PRINT (aku tandain (// INI : ) yaa)
+                // INI : Console.WriteLine("\nNama akun: " + namaAkun + " dan " + namaExplore);
                 if (BFS(adj) == false) {
-                    System.Console.WriteLine("Tidak ada jalur koneksi yang tersedia");
-                    System.Console.WriteLine("Anda harus memulai koneksi baru itu sendiri.");
-                }
-                	
-                List<int> path = new List<int>();
-                tempNamaExploreInt = namaExploreInt;
-                path.Add(tempNamaExploreInt);
-                
-                while (pred[tempNamaExploreInt] != -1){
-                    path.Add(pred[tempNamaExploreInt]);
-                    tempNamaExploreInt = pred[tempNamaExploreInt];
-                }
-                
-                if (succ[namaExploreInt] == 1){
-                    System.Console.WriteLine("0-degree connection");
-                }
-                else if (succ[namaExploreInt] == 2){
-                    System.Console.WriteLine(succ[namaExploreInt]-1 + "st-degree connection");
-                }
-                else if (succ[namaExploreInt] == 3){
-                    System.Console.WriteLine(succ[namaExploreInt]-1 + "nd-degree connection");
+                    // INI : System.Console.WriteLine("Tidak ada jalur koneksi yang tersedia");
+                    // INI : System.Console.WriteLine("Anda harus memulai koneksi baru itu sendiri.");
                 }
                 else{
-                    System.Console.WriteLine(succ[namaExploreInt]-1 + "th-degree connection");
-                }
-                if (namaAkunInt < namaExploreInt){
-                    for(i = path.Count - 1; i >= 0; i--){
-                        if (path[i] == namaExploreInt){
-                            Console.WriteLine(namaExplore);
-                        }
-                        else if (path[i] == namaAkunInt){
-                            Console.Write(namaAkun + " -> ");
-                        }
-                        else{
-                            for (int j = 0; j < nVertices; j++){
-                                if (path[i] == SimpulInt[simpulArray[j]]){
-                                    Console.Write(simpulArray[j] + " -> ");
-                                }
-                            }
-                        }
+                    pathInt.Add(namaExploreInt);
+                    
+                    int tempNamaExploreInt = namaExploreInt;
+                    while (pred[tempNamaExploreInt] != -1){
+                        pathInt.Add(pred[tempNamaExploreInt]);
+                        tempNamaExploreInt = pred[tempNamaExploreInt];
+                        // Console.WriteLine(pred[tempNamaExploreInt]);
                     }
                     
-                }
-                else{
-                    for(i = path.Count - 1; i >= 0; i--){
-                        if (path[i] == namaExploreInt){
-                            Console.WriteLine(namaExplore);
+                    for(i = pathInt.Count - 1; i >= 0; i--){
+                        if (pathInt[i] == namaExploreInt){
+                            pathChar.Add(namaExplore);
+                            int Derajat = degree[namaExploreInt] - 1;
+                            // INI : Console.WriteLine(namaExplore);
+                            if (Derajat == 0){
+                                // INI : System.Console.WriteLine("0-degree connection");
+                                hasil.Add((pathChar, Derajat));
+                            }
+                            else if (Derajat == 1){
+                                // INI : System.Console.WriteLine(Derajat + "st-degree connection");
+                                hasil.Add((pathChar, Derajat));
+                            }
+                            else if (Derajat == 2){
+                                // INI : System.Console.WriteLine(Derajat + "nd-degree connection");
+                                hasil.Add((pathChar, Derajat));
+                            }
+                            else{
+                                // INI : System.Console.WriteLine(Derajat + "th-degree connection");
+                                hasil.Add((pathChar, Derajat));
+                            }
                         }
-                        else if (path[i] == namaAkunInt){
-                            Console.Write(namaAkun + " -> ");
+                        else if (pathInt[i] == namaAkunInt){
+                            pathChar.Add(namaAkun);
+                            // INI : Console.Write(namaAkun + " -> ");
                         }
                         else{
-                            for (int j = 0; j < nVertices; j++){
-                                if (path[i] == SimpulInt[simpulArray[j]]){
-                                    Console.Write(simpulArray[j] + " -> ");
+                            for (j = 0; j < nVertices; j++){
+                                if (pathInt[i] == SimpulInt[simpulArray[j]]){
+                                    pathChar.Add(simpulArray[j]);
+                                    // INI : Console.Write(simpulArray[j] + " -> ");
                                 }
                             }
                         }
                     }
                     Console.WriteLine();
                 }
+                return hasil;
             }
             public static bool BFS(List<List<int>> adj) {
                 List<int> queue = new List<int>();
@@ -202,31 +195,34 @@ namespace Tubes2Stima{
                 
                 for (i = 0; i < nVertices; i++){
                     visited[i] = false;
-                    succ[i] = int.MaxValue;
+                    degree[i] = int.MaxValue;
                     pred[i] = -1;
                 }
 
                 visited[namaAkunInt] = true;
-                succ[namaAkunInt] = 0;
+                degree[namaAkunInt] = 0;
                 queue.Add(namaAkunInt);
                 
+                Boolean found = false;
                 while (queue.Count != 0){
                     j = queue[0];
                     queue.RemoveAt(0);
                     
                     for (i = 0; i < adj[j].Count; i++){
-                        if (visited[adj[j][i]] == false){
-                            visited[adj[j][i]] = true;
-                            succ[adj[j][i]] = succ[j] + 1;
+                        if (!visited[adj[j][i]]){
+                            degree[adj[j][i]] = degree[j] + 1;
                             pred[adj[j][i]] = j;
+                            visited[adj[j][i]] = true;
                             queue.Add(adj[j][i]);
-                    
-                            if (adj[j][i] == namaExploreInt)
-                            return true;
+                            
+                            // Akun yang di Explore found
+                            if (adj[j][i] == namaExploreInt){
+                                found = true;
+                            }
                         }
                     }
                 }
-                return false;
+                return found;
             }
             public static void InputAkun() {
                 int pilih;
@@ -241,10 +237,11 @@ namespace Tubes2Stima{
                     addEdge(adj, a, b);
                 }
 
-                Console.Write("Choose Account : ");
+                // ATURAN PRINT (aku tandain (// INI : ) ya)
+                // INI : Console.Write("Choose Account : ");
                 namaAkun = Console.ReadLine()[0];
 
-                Console.Write("Explore friends with : ");
+                // INI : Console.Write("Explore friends with : ");
                 namaExplore = Console.ReadLine()[0];
                 Console.WriteLine();
 
@@ -252,23 +249,19 @@ namespace Tubes2Stima{
                     line = lines[i].Split(' ');
                     if (namaAkun == lines[i][0]){
                         namaAkunInt = SimpulInt[lines[i][0]];
-                        //Console.WriteLine(i + "Ini 1 : " + namaAkun + namaAkunInt + SimpulInt[lines[i][0]]);
                     }
                     if (namaAkun == line[1][0]){
                         namaAkunInt = SimpulInt[line[1][0]];
-                        //Console.WriteLine(i + "ini 2 : " + namaAkun + namaAkunInt + SimpulInt[line[1][0]]);
                     }
                     if (namaExplore == line[1][0]){
                         namaExploreInt = SimpulInt[line[1][0]];
-                        //Console.WriteLine(i + "ini 3 : " + namaExplore + namaExploreInt + SimpulInt[line[1][0]]);
                     }
                     if (namaExplore == lines[i][0]){
                         namaExploreInt = SimpulInt[lines[i][0]];
-                        //Console.WriteLine(i + "ini 4 : " + namaExplore + namaExploreInt + SimpulInt[lines[i][0]]);
                     }
                 }
 
-                Console.Write("Pencarian Dengan : \n1. BFS \n2. DFS \nMasukkan nomor pilihan :  ");
+                // INI : Console.Write("Pencarian Dengan : \n1. BFS \n2. DFS \nMasukkan nomor pilihan :  ");
                 pilih = Int32.Parse(Console.ReadLine());
 
                 if (pilih == 1){
@@ -288,7 +281,7 @@ namespace Tubes2Stima{
                 else{
                     Boolean found = false;
                     while (!found){
-                        Console.Write("Input Salah! \nSilahkan Masukkan ulang pilihan : ");
+                        // d. Console.Write("Input Salah! \nSilahkan Masukkan ulang pilihan : ");
                         pilih = Int32.Parse(Console.ReadLine());
                         if (pilih == 1){
                             found = true;
@@ -303,7 +296,6 @@ namespace Tubes2Stima{
                             foreach((int a, int b) in eL){
                                 addEdge1(adj1, a, b);
                             }
-
                             DFS(adj1);
                         }
                     }
