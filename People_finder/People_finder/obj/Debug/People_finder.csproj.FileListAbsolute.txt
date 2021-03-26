@@ -2,7 +2,6 @@ E:\Project\College\Strategi Algoritma\Tugas Besar 2 - People You May Know\People
 E:\Project\College\Strategi Algoritma\Tugas Besar 2 - People You May Know\People_finder\People_finder\bin\Debug\People_finder.exe
 E:\Project\College\Strategi Algoritma\Tugas Besar 2 - People You May Know\People_finder\People_finder\bin\Debug\People_finder.pdb
 E:\Project\College\Strategi Algoritma\Tugas Besar 2 - People You May Know\People_finder\People_finder\obj\Debug\People_finder.csprojAssemblyReference.cache
-E:\Project\College\Strategi Algoritma\Tugas Besar 2 - People You May Know\People_finder\People_finder\obj\Debug\People_finder.Form1.resources
 E:\Project\College\Strategi Algoritma\Tugas Besar 2 - People You May Know\People_finder\People_finder\obj\Debug\People_finder.Properties.Resources.resources
 E:\Project\College\Strategi Algoritma\Tugas Besar 2 - People You May Know\People_finder\People_finder\obj\Debug\People_finder.csproj.GenerateResource.cache
 E:\Project\College\Strategi Algoritma\Tugas Besar 2 - People You May Know\People_finder\People_finder\obj\Debug\People_finder.csproj.CoreCompileInputs.cache
@@ -13,3 +12,4 @@ E:\Project\College\Strategi Algoritma\Tugas Besar 2 - People You May Know\People
 E:\Project\College\Strategi Algoritma\Tugas Besar 2 - People You May Know\People_finder\People_finder\bin\Debug\Microsoft.Msagl.GraphViewerGdi.dll
 E:\Project\College\Strategi Algoritma\Tugas Besar 2 - People You May Know\People_finder\People_finder\bin\Debug\Microsoft.Msagl.WpfGraphControl.dll
 E:\Project\College\Strategi Algoritma\Tugas Besar 2 - People You May Know\People_finder\People_finder\obj\Debug\People_finder.csproj.CopyComplete
+E:\Project\College\Strategi Algoritma\Tugas Besar 2 - People You May Know\People_finder\People_finder\obj\Debug\People_finder.MainForm.resources
