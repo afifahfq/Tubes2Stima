@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GraphAddedLogic.cs" />
     <Compile Include="MainFormControls.cs">
       <SubType>Form</SubType>
     </Compile>

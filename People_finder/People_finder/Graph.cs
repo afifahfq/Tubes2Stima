@@ -2,26 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class Graph
+public partial class Graph
 {
-    public int nEdges, nVertices, count, namaAkunInt, namaExploreInt, uAngka, vAngka, i, j;
-    public List<(char, string)> edgeList;
-    public List<(int, int)> eL;
-    public Dictionary<char, int> SimpulInt;
-    public string[] lines, line;
-    public char[] simpulArray;
-    public List<(int, char)> simpulAngka;
-    public List<char> uniqueList, pathChar, pathCharDFS;
-    public int[] degree, pred;
-    public char namaAkun, namaExplore;
-    public Dictionary<char, string> mutuals, sortedMutuals;
-    public List<int> myFriends, currFriends;
-    public List<int>[] adj1;
-    public List<(List<char>, int)> hasilBFS, hasilDFS;
+    private int nEdges, nVertices, count, namaAkunInt, namaExploreInt, uAngka, vAngka, i, j;
 
-    public void InputInt( string filename)
+    // Edges
+    private List<(char, string)> edgeList;
+    private List<(int, int)> eL;
+
+    // Simpul
+    private Dictionary<char, int> SimpulInt;
+    private char[] simpulArray;
+    private List<(int, char)> simpulAngka;
+    private List<char> uniqueList, pathChar, pathCharDFS;
+    private int[] degree, pred;
+    private char namaAkun, namaExplore;
+    private Dictionary<char, string> mutuals, sortedMutuals;
+    private List<int> myFriends, currFriends;
+    private List<int>[] adj1;
+    private List<(List<char>, int)> hasilBFS, hasilDFS;
+
+
+    public void InputInt(string Filename)
     {
-        lines = System.IO.File.ReadAllLines(filename);
+        string[] lines, line;
+        lines = System.IO.File.ReadAllLines(Filename);
         simpulAngka = new List<(int, char)>();
         uniqueList = new List<char>();
 
@@ -41,12 +46,6 @@ public class Graph
         simpulArray = uniqueList.ToArray();
         Array.Sort(simpulArray);
         nVertices = simpulArray.Length;
-        /* for (int i = 0; i < nVertices; i++){
-            //Console.Write(simpulArray[i]);
-            //Console.WriteLine("INI SIMPUL ARRAY : {0}", simpulArray.Length);
-            //newsimpul = simpulArray.Distinct().ToArray();
-        } */
-        //Console.WriteLine();
         for (int i = 0; i < nVertices; i++)
         {
             simpulAngka.Add((i + 1, simpulArray[i]));
@@ -59,13 +58,6 @@ public class Graph
             SimpulInt[simpulArray[i]] = i;
         }
 
-        //char awal = simpulArray[0];
-        //Console.WriteLine(awal);
-        //int root = SimpulInt[simpulArray[0]];
-        //Console.WriteLine(root);
-        //Console.WriteLine("INI " + SimpulInt[line[0]]);
-        //Console.WriteLine("INI l0" + line[0]); // line[0] == c
-        //int m = Int32.Parse(line[0]); // 13, m = nEdges
         eL = new List<(int, int)>();
 
         for (int i = 1; i <= nEdges; i++)
@@ -279,102 +271,6 @@ public class Graph
         }
         return found;
     }
-    public void InputAkun()
-    {
-        int pilih;
-        List<List<int>> adj = new List<List<int>>(nVertices);
-        List<int>[] adj1 = new List<int>[nVertices];
-
-        for (i = 0; i < nVertices; i++)
-        {
-            adj.Add(new List<int>());
-        }
-
-        foreach ((int a, int b) in eL)
-        {
-            addEdge(adj, a, b);
-        }
-
-        // ATURAN PRINT (aku tandain (// INI : ) ya)
-        // INI : Console.Write("Choose Account : ");
-        namaAkun = Console.ReadLine()[0];
-
-        // INI : Console.Write("Explore friends with : ");
-        namaExplore = Console.ReadLine()[0];
-        Console.WriteLine();
-
-        for (int i = 1; i <= nEdges; i++)
-        {
-            line = lines[i].Split(' ');
-            if (namaAkun == lines[i][0])
-            {
-                namaAkunInt = SimpulInt[lines[i][0]];
-            }
-            if (namaAkun == line[1][0])
-            {
-                namaAkunInt = SimpulInt[line[1][0]];
-            }
-            if (namaExplore == line[1][0])
-            {
-                namaExploreInt = SimpulInt[line[1][0]];
-            }
-            if (namaExplore == lines[i][0])
-            {
-                namaExploreInt = SimpulInt[lines[i][0]];
-            }
-        }
-
-        // INI : Console.Write("Pencarian Dengan : \n1. BFS \n2. DFS \nMasukkan nomor pilihan :  ");
-        pilih = Int32.Parse(Console.ReadLine());
-
-        if (pilih == 1)
-        {
-            exploreFriendUsingBFS(adj);
-        }
-        else if (pilih == 2)
-        {
-            adj1 = new List<int>[nVertices];
-            for (i = 0; i < nVertices; ++i)
-            {
-                adj1[i] = new List<int>();
-            }
-            foreach ((int a, int b) in eL)
-            {
-                addEdge1(adj1, a, b);
-            }
-
-            DFS(adj1);
-        }
-        else
-        {
-            Boolean found = false;
-            while (!found)
-            {
-                // d. Console.Write("Input Salah! \nSilahkan Masukkan ulang pilihan : ");
-                pilih = Int32.Parse(Console.ReadLine());
-                if (pilih == 1)
-                {
-                    found = true;
-                    Console.WriteLine();
-                    exploreFriendUsingBFS(adj);
-                }
-                if (pilih == 2)
-                {
-                    adj1 = new List<int>[nVertices];
-                    for (i = 0; i < nVertices; ++i)
-                    {
-                        adj1[i] = new List<int>();
-                    }
-                    foreach ((int a, int b) in eL)
-                    {
-                        addEdge1(adj1, a, b);
-                    }
-                    DFS(adj1);
-                }
-            }
-        }
-        FriendsRecom(adj);
-    }
     public Dictionary<char, string> FriendsRecom(List<List<int>> adj)
     {
         myFriends = new List<int>();
@@ -472,4 +368,6 @@ public class Graph
         }
         return i;
     }
+
+   
 }

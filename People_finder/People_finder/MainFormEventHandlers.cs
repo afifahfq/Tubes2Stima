@@ -14,6 +14,7 @@ namespace People_finder
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog
             {
+                // Change this in the final commit 
                 InitialDirectory = @"E:\Project\College\Strategi Algoritma\Tugas Besar 2 - People You May Know",
                 Title = "Browse Text Files To Turn Into Graphs",
 
@@ -34,7 +35,30 @@ namespace People_finder
                 this.FileName = openFileDialog1.FileName;
                 this.BrowseFilename.Text = this.FileName;
             }
-            Console.Out.WriteLine(this.FileName);
+        }
+
+        public void openFile(Object sender, EventArgs e)
+        {
+            this.currentGraph.InputInt(this.FileName);
+            this.currentGraph.inputFile(this.FileName);
+            this.currentGraph.printGraph();
+            this.visualizeGraph();
+        }
+
+        public void visualizeGraph()
+        {
+            this.SuspendLayout();
+            foreach (var node in this.currentGraph.getNodes())
+            {
+                List<string> connection = this.currentGraph.getConnectionList()[node];
+                foreach (var connectedNode in connection)
+                {
+                    this.visualizerGraph.AddEdge(node, connectedNode);
+                }
+            }
+
+            viewer.Graph = this.visualizerGraph;
+            this.ResumeLayout();
         }
     }
 }

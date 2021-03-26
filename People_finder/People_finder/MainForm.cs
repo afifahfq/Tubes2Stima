@@ -16,9 +16,12 @@ namespace People_finder
         //Attributes
         private String FileName = "";
         private int width = 800;
-        private int length =800;
-        private Graph currentGraph;
-
+        private int length = 800;
+        private Graph currentGraph = new Graph();
+        //create a graph object 
+        private Microsoft.Msagl.Drawing.Graph visualizerGraph = new Microsoft.Msagl.Drawing.Graph("graph");
+        //create a viewer object 
+        private Microsoft.Msagl.GraphViewerGdi.GViewer viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
 
         // Adjust This Later 
         private char firstPerson = 'A';
@@ -30,10 +33,6 @@ namespace People_finder
         }
 
         private void Form1_Load(object sender, EventArgs e) {
-            //create a viewer object 
-            Microsoft.Msagl.GraphViewerGdi.GViewer viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
-            //create a graph object 
-            Microsoft.Msagl.Drawing.Graph graph = new Microsoft.Msagl.Drawing.Graph("graph");
 
 
             // DropDown Menu 
@@ -55,7 +54,6 @@ namespace People_finder
             ExploreAccountDropdown.Items.AddRange(accounts);
 
             // Bind the graph to the viewer 
-            viewer.Graph = graph;
             viewer.Dock = DockStyle.Fill;
 
 
@@ -74,6 +72,7 @@ namespace People_finder
 
             // Control Events 
             this.BrowseButton.Click += browseFile;
+            this.OpenFileButton.Click += openFile;
 
             // Layout 
             TableLayoutPanel panel = new TableLayoutPanel
