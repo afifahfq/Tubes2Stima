@@ -33,7 +33,6 @@ namespace People_finder
 
 
         // Main Menu 
-
         TableLayoutPanel MainMenuPanel = new TableLayoutPanel
         {
             ColumnCount = 3,
@@ -41,6 +40,7 @@ namespace People_finder
             Dock = DockStyle.Fill,
             Location = new Point(0, 0),
             BorderStyle = BorderStyle.FixedSingle,
+            Padding = new Padding(10),
         };
 
 
@@ -76,6 +76,8 @@ namespace People_finder
             AutoSize = true
         };
 
+        
+
         private Button OpenFileButton = new Button
         {
             TextAlign = ContentAlignment.MiddleCenter,
@@ -93,6 +95,7 @@ namespace People_finder
             Dock = DockStyle.Fill,
             Location = new Point(0, 0),
             BorderStyle = BorderStyle.FixedSingle,
+            Padding = new Padding(10),
         };
 
 
@@ -104,7 +107,6 @@ namespace People_finder
             Dock = DockStyle.Fill,
             AutoSize = true
         };
-
         // Explore Friends 
         private Label ExploreLabel = new Label
         {
@@ -119,7 +121,7 @@ namespace People_finder
         {
             TextAlign = ContentAlignment.MiddleCenter,
             Text = "Submit",
-            Dock = DockStyle.None,
+            Anchor = AnchorStyles.Top,
             AutoSize = true
         };
 
@@ -138,17 +140,22 @@ namespace People_finder
 
 
             // DropDown Menu 
+            string[] accounts = new string[] { "A", "B", "C" };
+            ComboBox ChooseAccountDropdown = new ComboBox
+            {
+                Name = "Choose Account",
+                Dock = DockStyle.Fill,
+                Margin = new Padding(20)
+            };
+            ChooseAccountDropdown.Items.AddRange(accounts);
 
-            //this.ComboBox1 = new ComboBox();
-            //this.ComboBox1.Location = new System.Drawing.Point(128, 48);
-            //this.ComboBox1.Name = "ComboBox1";
-            //this.ComboBox1.Size = new System.Drawing.Size(100, 21);
-            //this.ComboBox1.TabIndex = 0;
-            //this.ComboBox1.Text = "Typical";
-            //string[] installs = new string[] { "Typical", "Compact", "Custom" };
-            //ComboBox1.Items.AddRange(installs);
-            //this.Controls.Add(this.ComboBox1);
-
+            ComboBox ExploreAccountDropdown = new ComboBox
+            {
+                Name = "Explore Account",
+                Dock = DockStyle.Fill,
+                Margin = new Padding(20)
+            };
+            ExploreAccountDropdown.Items.AddRange(accounts);
 
             // Bind the graph to the viewer 
             viewer.Graph = graph;
@@ -179,46 +186,77 @@ namespace People_finder
                 Dock = DockStyle.Fill,
                 Location = new Point(0, 0),
                 Padding = new Padding(10),
-                CellBorderStyle = TableLayoutPanelCellBorderStyle.Inset,
-                
+                //CellBorderStyle = TableLayoutPanelCellBorderStyle.Inset,
+
             };
 
             panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            panel.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            panel.RowStyles.Add(new RowStyle(SizeType.Percent, 5F));
             panel.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+            panel.RowStyles.Add(new RowStyle(SizeType.Percent, 35F));
             panel.RowStyles.Add(new RowStyle(SizeType.Percent, 40F));
-            panel.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
 
             MainMenuPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             MainMenuPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             MainMenuPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
-            MainMenuPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40F));
-            MainMenuPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40F));
-            MainMenuPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+            MainMenuPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 35F));
+            MainMenuPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 35F));
+            MainMenuPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
 
-            SubMenuPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
             SubMenuPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            SubMenuPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
+            SubMenuPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            SubMenuPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+            SubMenuPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+            SubMenuPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+            SubMenuPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40F));
+
+            FlowLayoutPanel groupBox1 = new FlowLayoutPanel {
+                FlowDirection = FlowDirection.RightToLeft
+            };
+
+            RadioButton radioButton1 = new RadioButton {
+                Text = "DFS"
+            };
+            RadioButton radioButton2 = new RadioButton { 
+                Text = "BFS"
+            };
+            RadioButton selectedrb = new RadioButton();
+            //Button getSelectedRB;
+
+            groupBox1.Controls.Add(radioButton1);
+            groupBox1.Controls.Add(radioButton2);
+            //groupBox1.Controls.Add(getSelectedRB);
+            //groupBox1.Text = "Radio Buttons";
+
 
             // Add Controls to MainMenuPanel
             MainMenuPanel.Controls.Add(BrowseLabel);
             MainMenuPanel.Controls.Add(BrowseFilename);
             MainMenuPanel.Controls.Add(BrowseButton);
             MainMenuPanel.Controls.Add(AlgorithmLabel);
+            MainMenuPanel.Controls.Add(groupBox1);
             MainMenuPanel.Controls.Add(OpenFileButton, 0, 2);
 
             // Add Controls to SubMenuPanel
-            SubMenuPanel.Controls.Add(ChooseAccountLabel);
-            SubMenuPanel.Controls.Add(ExploreLabel);
-            SubMenuPanel.Controls.Add(SubmitButton);
+            SubMenuPanel.Controls.Add(ChooseAccountLabel, 0, 0);
+            SubMenuPanel.Controls.Add(ChooseAccountDropdown, 1, 0);
+            SubMenuPanel.Controls.Add(ExploreLabel, 0, 1);
+            SubMenuPanel.Controls.Add(ExploreAccountDropdown, 1, 1);
+            SubMenuPanel.Controls.Add(SubmitButton, 1, 2);
 
-      
+            TableLayoutPanel newPanel = new TableLayoutPanel
+            {
+                ColumnCount = 1,
+                RowCount = 3,
+                MinimumSize = new Size(200, 200),
+            };
 
+            SubMenuPanel.Controls.Add(newPanel, 0, 3);
             // Add Controls to Layout
             panel.Controls.Add(Title, 0, 0);
             panel.Controls.Add(MainMenuPanel, 0, 1);
             panel.Controls.Add(viewer, 0, 2);
-            panel.Controls.Add(SubMenuPanel);
+            panel.Controls.Add(SubMenuPanel, 0, 3);
 
             this.Controls.Add(panel);
         }
