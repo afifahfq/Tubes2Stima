@@ -149,6 +149,7 @@ namespace Tubes2Stima{
                 if (BFS(adj) == false) {
                     // INI : System.Console.WriteLine("Tidak ada jalur koneksi yang tersedia");
                     // INI : System.Console.WriteLine("Anda harus memulai koneksi baru itu sendiri.");
+                    throw new Exception("Tidak ada jalur koneksi yang tersedia");
                 }
                 else{
                     pathInt.Add(namaExploreInt);

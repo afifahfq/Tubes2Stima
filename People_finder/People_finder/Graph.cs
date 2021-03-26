@@ -19,8 +19,8 @@ public partial class Graph
     private char namaAkun, namaExplore;
     private Dictionary<char, string> mutuals, sortedMutuals;
     private List<int> myFriends, currFriends;
-    private List<int>[] adj1;
-    private List<(List<char>, int)> hasilBFS, hasilDFS;
+    private List<List<int>> adj;
+    public List<(List<char>, int)> hasilBFS, hasilDFS;
 
 
     public void InputInt(string Filename)
@@ -68,6 +68,37 @@ public partial class Graph
             eL.Add((uAngka, vAngka));
         }
     }
+    public void InputAkun(char firstAccount, char secondAccount)
+    {
+        this.adj = new List<List<int>>(nVertices);
+        this.namaAkun = firstAccount;
+        this.namaExplore = secondAccount;
+
+        for (i = 0; i < nVertices; i++)
+        {
+            adj.Add(new List<int>());
+        }
+
+        foreach ((int a, int b) in eL)
+        {
+            addEdge(adj, a, b);
+        }
+
+
+        foreach (var node in this.nodes)
+        {
+            
+            if (namaAkun == node.ToCharArray()[0])
+            {
+                namaAkunInt = SimpulInt[node.ToCharArray()[0]];
+            }
+            if (namaExplore == node.ToCharArray()[0])
+            {
+                namaExploreInt = SimpulInt[node.ToCharArray()[0]];
+            }
+        }
+
+    }
     public void addEdge(List<List<int>> adj, int v, int w)
     {
         adj[v].Add(w);
@@ -80,7 +111,7 @@ public partial class Graph
     public List<(List<char>, int)> exploreFriendUsingDFS(List<int>[] adj1, int v, bool[] visited)
     {
         List<char> pathCharDFS = new List<char>();
-        List<(List<char>, int)> hasilDFS = new List<(List<char>, int)>();
+        this.hasilDFS = new List<(List<char>, int)>();
         visited[v] = true;
         if (v == namaExploreInt)
         {
@@ -140,22 +171,22 @@ public partial class Graph
         }
         return hasilDFS;
     }
-    public void DFS(List<int>[] adj1)
+    public void DFS()
     {
         bool[] visited = new bool[nVertices];
         for (i = 0; i < nVertices; ++i)
         {
             if (!visited[i])
             {
-                exploreFriendUsingDFS(adj1, i, visited);
+                exploreFriendUsingDFS(this.adj.ToArray(), i, visited);
             }
         }
     }
-    public List<(List<char>, int)> exploreFriendUsingBFS(List<List<int>> adj)
+    public List<(List<char>, int)> exploreFriendUsingBFS()
     {
         List<int> pathInt = new List<int>();
         List<char> pathChar = new List<char>();
-        List<(List<char>, int)> hasilBFS = new List<(List<char>, int)>();
+        this.hasilBFS = new List<(List<char>, int)>();
 
         pred = new int[nVertices];
         degree = new int[nVertices];
@@ -271,7 +302,7 @@ public partial class Graph
         }
         return found;
     }
-    public Dictionary<char, string> FriendsRecom(List<List<int>> adj)
+    public Dictionary<char, string> FriendsRecom()
     {
         myFriends = new List<int>();
         bool[] visited = new bool[nVertices];

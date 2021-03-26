@@ -18,14 +18,13 @@ namespace People_finder
         private int width = 800;
         private int length = 800;
         private Graph currentGraph = new Graph();
-        //create a graph object 
-        private Microsoft.Msagl.Drawing.Graph visualizerGraph = new Microsoft.Msagl.Drawing.Graph("graph");
-        //create a viewer object 
-        private Microsoft.Msagl.GraphViewerGdi.GViewer viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
 
-        // Adjust This Later 
-        private char firstPerson = 'A';
-        private char secondPerson = 'B';
+        // Needed for Controls Logics 
+        private string[] Algorithms = new string[] {"BFS", "DFS" };
+        private string currentAlgorithm;
+        private string firstPerson;
+        private string secondPerson;
+        
 
         public MainForm()
 		{
@@ -35,24 +34,7 @@ namespace People_finder
         private void Form1_Load(object sender, EventArgs e) {
 
 
-            // DropDown Menu 
-            string[] accounts = new string[] { "A", "B", "C" };
-            ComboBox ChooseAccountDropdown = new ComboBox
-            {
-                Name = "Choose Account",
-                Dock = DockStyle.Fill,
-                Margin = new Padding(20)
-            };
-            ChooseAccountDropdown.Items.AddRange(accounts);
-
-            ComboBox ExploreAccountDropdown = new ComboBox
-            {
-                Name = "Explore Account",
-                Dock = DockStyle.Fill,
-                Margin = new Padding(20)
-            };
-            ExploreAccountDropdown.Items.AddRange(accounts);
-
+            
             // Bind the graph to the viewer 
             viewer.Dock = DockStyle.Fill;
 
@@ -70,9 +52,20 @@ namespace People_finder
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.StartPosition = FormStartPosition.CenterScreen;
 
+            this.currentAlgorithm = this.Algorithms[0];
+            this.AlgorithmDropdown.Items.AddRange(this.Algorithms);
+            this.AlgorithmDropdown.SelectedItem = this.currentAlgorithm;
+
             // Control Events 
+            // Buttons
             this.BrowseButton.Click += browseFile;
             this.OpenFileButton.Click += openFile;
+            this.SubmitButton.Click += submitData;
+            // Dropdowns
+            this.ChooseAccountDropdown.SelectedIndexChanged += firstAccountDropdownChange;
+            this.ExploreAccountDropdown.SelectedIndexChanged += secondAccountDropdownChange;
+            this.AlgorithmDropdown.SelectedIndexChanged += algorithmDropdownChange;
+
 
             // Layout 
             TableLayoutPanel panel = new TableLayoutPanel
@@ -107,31 +100,12 @@ namespace People_finder
             SubMenuPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
             SubMenuPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40F));
 
-            FlowLayoutPanel groupBox1 = new FlowLayoutPanel {
-                FlowDirection = FlowDirection.RightToLeft
-            };
-
-            RadioButton radioButton1 = new RadioButton {
-                Text = "DFS"
-            };
-            RadioButton radioButton2 = new RadioButton { 
-                Text = "BFS"
-            };
-            RadioButton selectedrb = new RadioButton();
-            //Button getSelectedRB;
-
-            groupBox1.Controls.Add(radioButton1);
-            groupBox1.Controls.Add(radioButton2);
-            //groupBox1.Controls.Add(getSelectedRB);
-            //groupBox1.Text = "Radio Buttons";
-
-
             // Add Controls to MainMenuPanel
             MainMenuPanel.Controls.Add(BrowseLabel);
             MainMenuPanel.Controls.Add(BrowseFilename);
             MainMenuPanel.Controls.Add(BrowseButton);
             MainMenuPanel.Controls.Add(AlgorithmLabel);
-            MainMenuPanel.Controls.Add(groupBox1);
+            MainMenuPanel.Controls.Add(AlgorithmDropdown);
             MainMenuPanel.Controls.Add(OpenFileButton, 0, 2);
 
             // Add Controls to SubMenuPanel
@@ -140,15 +114,8 @@ namespace People_finder
             SubMenuPanel.Controls.Add(ExploreLabel, 0, 1);
             SubMenuPanel.Controls.Add(ExploreAccountDropdown, 1, 1);
             SubMenuPanel.Controls.Add(SubmitButton, 1, 2);
-
-            TableLayoutPanel newPanel = new TableLayoutPanel
-            {
-                ColumnCount = 1,
-                RowCount = 3,
-                MinimumSize = new Size(200, 200),
-            };
-
-            SubMenuPanel.Controls.Add(newPanel, 0, 3);
+            SubMenuPanel.Controls.Add(FriendRecomendationBox, 0, 3);
+            
             // Add Controls to Layout
             panel.Controls.Add(Title, 0, 0);
             panel.Controls.Add(MainMenuPanel, 0, 1);

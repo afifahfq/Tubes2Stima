@@ -12,6 +12,11 @@ namespace People_finder
     {
 
         // Controls 
+        // Visualizer
+        private Microsoft.Msagl.Drawing.Graph visualizerGraph;
+        private Microsoft.Msagl.GraphViewerGdi.GViewer viewer = new Microsoft.Msagl.GraphViewerGdi.GViewer();
+
+        // Title
         private Label Title = new Label
         {
             Text = "People Finder",
@@ -65,6 +70,13 @@ namespace People_finder
             AutoSize = true
         };
 
+        ComboBox AlgorithmDropdown = new ComboBox
+        {
+            Name = "Explore Account",
+            Dock = DockStyle.Fill,
+            Margin = new Padding(20),
+        };
+
 
 
         private Button OpenFileButton = new Button
@@ -105,6 +117,21 @@ namespace People_finder
             AutoSize = true
         };
 
+        // DropDown Menu 
+        ComboBox ChooseAccountDropdown = new ComboBox
+        {
+            Name = "Choose Account",
+            Dock = DockStyle.Fill,
+            Margin = new Padding(20),
+        };
+
+        ComboBox ExploreAccountDropdown = new ComboBox
+        {
+            Name = "Explore Account",
+            Dock = DockStyle.Fill,
+            Margin = new Padding(20),
+        };
+
         // Submit Button 
         private Button SubmitButton = new Button
         {
@@ -115,6 +142,11 @@ namespace People_finder
         };
 
         // Friends Recommendation 
-
+        TableLayoutPanel FriendRecomendationBox = new TableLayoutPanel
+        {
+            ColumnCount = 1,
+            Dock = DockStyle.Fill,
+            Visible = false,
+        };
     }
 }

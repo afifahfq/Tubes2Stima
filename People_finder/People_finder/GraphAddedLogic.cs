@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 public partial class Graph
 {
     // Added 
-    private List<string> nodes;
+    private List<string> nodes = new List<string>();
     private Dictionary<string, List<string>> connectionList = new Dictionary<string, List<string>>();
 
     // Getters 
