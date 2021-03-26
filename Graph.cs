@@ -12,13 +12,13 @@ namespace Tubes2Stima{
             public static string[] lines, line;
             public static char[] simpulArray;
             public static List<(int, char)> simpulAngka;
-            public static List<char> uniqueList, pathChar;
+            public static List<char> uniqueList, pathChar, pathCharDFS;
             public static int[] degree, pred;
             public static char namaAkun, namaExplore;
             public static Dictionary<char, string> mutuals, sortedMutuals;
             public static List<int> myFriends, currFriends;
             public static List<int>[] adj1;
-            public static List<(List<char>, int)> hasil;
+            public static List<(List<char>, int)> hasilBFS, hasilDFS;
             
             public static void InputInt(){
                 lines = System.IO.File.ReadAllLines("input.txt");
@@ -79,21 +79,28 @@ namespace Tubes2Stima{
             public static void addEdge1(List<int>[] adj1, int v, int w){
                 adj1[v].Add(w);
             }
-            public static void exploreFriendUsingDFS(List<int>[] adj1, int v, bool[] visited){
+            public static List<(List<char>, int)> exploreFriendUsingDFS(List<int>[] adj1, int v, bool[] visited){
+                List<char> pathCharDFS = new List<char>();
+                List<(List<char>, int)> hasilDFS = new List<(List<char>, int)>();
                 visited[v] = true;
                 if (v == namaExploreInt){
-                    Console.WriteLine(Tubes2Stima.namaExplore);
+                    pathCharDFS.Add(namaExplore);
+                    // INI : Console.WriteLine(namaExplore);
                     if (count == 0){
-                        System.Console.WriteLine("No-degree connection");
+                        // INI : System.Console.WriteLine("No-degree connection");
+                        hasilDFS.Add((pathCharDFS, count));
                     }
                     else if (count == 1){
-                        System.Console.WriteLine(count + "st-degree connection");
+                        // INI : System.Console.WriteLine(count + "st-degree connection");
+                        hasilDFS.Add((pathCharDFS, count));
                     }
                     else if (count == 2){
-                        System.Console.WriteLine(count + "nd-degree connection");
+                        // INI : System.Console.WriteLine(count + "nd-degree connection");
+                        hasilDFS.Add((pathCharDFS, count));
                     }
                     else{
-                        System.Console.WriteLine(count + "th-degree connection");
+                        // INI : System.Console.WriteLine(count + "th-degree connection");
+                        hasilDFS.Add((pathCharDFS, count));
                     }
                     for (i = 0; i < nVertices; ++i){
                         visited[i] = true;
@@ -101,12 +108,14 @@ namespace Tubes2Stima{
                 }
                 else{
                     if (v == namaAkunInt){
-                        Console.Write(namaAkun + " -> ");
+                        pathCharDFS.Add(namaAkun);
+                        // INI : Console.Write(namaAkun + " -> ");
                     }
                     else{
                         for (int j = 0; j < nVertices; j++){
                             if (v == SimpulInt[simpulArray[j]]){
-                                Console.Write(simpulArray[j] + " -> ");
+                                pathCharDFS.Add(simpulArray[j]);
+                                // INI : Console.Write(simpulArray[j] + " -> ");
                                 count += 1;
                             }
                         }
@@ -117,6 +126,7 @@ namespace Tubes2Stima{
                         }
                     }
                 }
+                return hasilDFS;
             }
             public static void DFS(List<int>[] adj1){
                 bool[] visited = new bool[nVertices];
@@ -129,7 +139,7 @@ namespace Tubes2Stima{
             public static List<(List<char>, int)> exploreFriendUsingBFS(List<List<int>> adj) {
                 List<int> pathInt = new List<int>();
                 List<char> pathChar = new List<char>();
-                List<(List<char>, int)> hasil = new List<(List<char>, int)>();
+                List<(List<char>, int)> hasilBFS = new List<(List<char>, int)>();
 
                 pred = new int[nVertices];
                 degree = new int[nVertices];
@@ -157,19 +167,19 @@ namespace Tubes2Stima{
                             // INI : Console.WriteLine(namaExplore);
                             if (Derajat == 0){
                                 // INI : System.Console.WriteLine("0-degree connection");
-                                hasil.Add((pathChar, Derajat));
+                                hasilBFS.Add((pathChar, Derajat));
                             }
                             else if (Derajat == 1){
                                 // INI : System.Console.WriteLine(Derajat + "st-degree connection");
-                                hasil.Add((pathChar, Derajat));
+                                hasilBFS.Add((pathChar, Derajat));
                             }
                             else if (Derajat == 2){
                                 // INI : System.Console.WriteLine(Derajat + "nd-degree connection");
-                                hasil.Add((pathChar, Derajat));
+                                hasilBFS.Add((pathChar, Derajat));
                             }
                             else{
                                 // INI : System.Console.WriteLine(Derajat + "th-degree connection");
-                                hasil.Add((pathChar, Derajat));
+                                hasilBFS.Add((pathChar, Derajat));
                             }
                         }
                         else if (pathInt[i] == namaAkunInt){
@@ -187,36 +197,38 @@ namespace Tubes2Stima{
                     }
                     Console.WriteLine();
                 }
-                return hasil;
+                return hasilBFS;
             }
             public static bool BFS(List<List<int>> adj) {
-                List<int> queue = new List<int>();
+                List<int> queue = new List<int>();      // To Save SimpulInt
                 bool []visited = new bool[nVertices];
-                
+
+                // Inisialisasi All
                 for (i = 0; i < nVertices; i++){
                     visited[i] = false;
                     degree[i] = int.MaxValue;
                     pred[i] = -1;
                 }
 
+                // Insialisasi untuk Akun
                 visited[namaAkunInt] = true;
                 degree[namaAkunInt] = 0;
                 queue.Add(namaAkunInt);
                 
                 Boolean found = false;
                 while (queue.Count != 0){
-                    j = queue[0];
+                    int simpulQueue = queue[0];
                     queue.RemoveAt(0);
                     
-                    for (i = 0; i < adj[j].Count; i++){
-                        if (!visited[adj[j][i]]){
-                            degree[adj[j][i]] = degree[j] + 1;
-                            pred[adj[j][i]] = j;
-                            visited[adj[j][i]] = true;
-                            queue.Add(adj[j][i]);
-                            
-                            // Akun yang di Explore found
-                            if (adj[j][i] == namaExploreInt){
+                    for (i = 0; i < adj[simpulQueue].Count; i++){
+                        if (!visited[adj[simpulQueue][i]]){
+                            degree[adj[simpulQueue][i]] = degree[simpulQueue] + 1;
+                            pred[adj[simpulQueue][i]] = simpulQueue;
+                            visited[adj[simpulQueue][i]] = true;
+                            queue.Add(adj[simpulQueue][i]);
+                        
+                            // Akun yang di Explore ketemu
+                            if (adj[simpulQueue][i] == namaExploreInt){
                                 found = true;
                             }
                         }
