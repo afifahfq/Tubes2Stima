@@ -28,34 +28,17 @@ namespace Tubes2Stima{
                 List<char> simpul = new List<char>();
                 for (int i = 1; i <= nEdges; i++){
                     line = lines[i].Split(' ');
-                    /* string items = string.Join(",", line);
-                    Console.WriteLine(items); */
                     char u = lines[i][0];
                     string v = line[1];
-                    // System.Console.WriteLine("Simpul Asal   : " + u);
-                    // System.Console.WriteLine("Simpul Tujuan : " + v);
                     simpul.Add(u);
                     simpul.Add(v[0]);
-                    //Console.WriteLine(simpul[i] + "{0}", i); 
 
                     uniqueList = simpul.Distinct().ToList();
-                    //uniqueList.ForEach(i => Console.WriteLine($"{i}"));
                 }
 
-                /*string s_simpul = string.Join(",", simpul);
-                Console.WriteLine(s_simpul);
-
-                string s_unique = string.Join(",", uniqueList);
-                Console.WriteLine(s_unique);
-
-                string s_lines = string.Join(",", lines);
-                Console.WriteLine(s_lines); */
-
-                //INI SIMPUL
-                simpulArray = uniqueList.ToArray(); //INI ABJAD
-                //Console.WriteLine(simpulArray);
+                simpulArray = uniqueList.ToArray();
                 Array.Sort(simpulArray);
-                nVertices = simpulArray.Length;   // INI JUMLAH SIMPUL
+                nVertices = simpulArray.Length;
                 /* for (int i = 0; i < nVertices; i++){
                     //Console.Write(simpulArray[i]);
                     //Console.WriteLine("INI SIMPUL ARRAY : {0}", simpulArray.Length);
@@ -64,22 +47,12 @@ namespace Tubes2Stima{
                 //Console.WriteLine();
                 for (int i = 0; i < nVertices; i++){
                     simpulAngka.Add((i+1, simpulArray[i]));
-                    //Console.WriteLine("{0}", i+1 + " = " + simpulArray[i]);
                 }
-
-                /*string s_angka = string.Join(",", simpulAngka);
-                Console.WriteLine(s_angka); */
-
-                // foreach (var a in simpulAngka){
-                //     Console.WriteLine(a);
-                // }
 
                 SimpulInt = new Dictionary<char, int>();
                 for (int i = 0; i < nVertices; i++){
                     line = lines[i].Split(' ');
                     SimpulInt[simpulArray[i]] = i;
-                    // Console.Write(SimpulInt[simpulArray[i]] + " "); // ini dalam bentuk integer
-                    // Console.WriteLine(simpulArray[i]); // ini abjadnya
                 }
 
                 //char awal = simpulArray[0];
@@ -91,83 +64,19 @@ namespace Tubes2Stima{
                 //int m = Int32.Parse(line[0]); // 13, m = nEdges
                 eL = new List<(int, int)>();
 
-                
                 for (int i = 1; i <= nEdges; i++){
                     line = lines[i].Split(' ');
                     uAngka = SimpulInt[lines[i][0]];
-                    //Console.WriteLine("ini line1" + line[1][0]);
                     vAngka = SimpulInt[line[1][0]];
                     eL.Add((uAngka, vAngka));
-                    //Console.WriteLine("ini u : " + a);
-                    //Console.WriteLine("ini v : " + b);
                 }
-                // foreach((int a, int b) in eL){
-                //      Console.WriteLine(a + " -> " + b);
-                // } 
             }
-            public static void InputChar(){
-                string[] lines, line;
-                char[] simpulArray;
-                List<(int, char)> simpulAngka;
-                List<char> uniqueList;
-
-                lines = System.IO.File.ReadAllLines("input.txt");
-                edgeList = new List<(char, string)>();
-                simpulAngka = new List<(int, char)>();
-                uniqueList = new List<char>();
-                
-                nEdges = Int32.Parse(lines[0]);
-                List<char> simpul = new List<char>();
-                for (int i = 1; i <= nEdges; i++){
-                    line = lines[i].Split(' ');
-                    char u = lines[i][0];
-                    string v = line[1];//;lines[i]
-                    //System.Console.WriteLine("Simpul Asal   : " + u);
-                    //System.Console.WriteLine("Simpul Tujuan : " + v);
-                    edgeList.Add((u, v));
-                    simpul.Add(u);
-                    simpul.Add(v[0]);
-                    //Console.WriteLine(simpul[i] + "{0}", i); 
-
-                    uniqueList = simpul.Distinct().ToList();
-                    //uniqueList.ForEach(i => Console.WriteLine($"{i}"));
-                }
-
-                //INI SIMPUL BROK
-                simpulArray = uniqueList.ToArray();
-                Array.Sort(simpulArray);
-                nVertices = simpulArray.Length;   // INI JUMLAH SIMPUL
-                for (int i = 0; i < nVertices; i++){
-                    Console.Write(simpulArray[i]);
-                    //Console.WriteLine("INI SIMPUL ARRAY : {0}", simpulArray.Length);
-                    //newsimpul = simpulArray.Distinct().ToArray();
-                }
-                Console.WriteLine();
-                for (int i = 0; i < nVertices; i++){
-                    simpulAngka.Add((i+1, simpulArray[i]));
-                    //Console.Write("{0}", simpulArrayHuruf + " = " + simpulArray[i]);
-                }
-
-                // foreach (var a in simpulAngka){
-                //     Console.WriteLine(a);
-                // }
-                        
-                // foreach (var a in edgeList){
-                //     Console.WriteLine(a);
-                //     Console.WriteLine(a.Item1);
-                //     Console.WriteLine(a.Item2);
-                // }
-
-                // foreach ((char a, string b) in edgeList){
-                //     Console.WriteLine(a + " -> " + b);
-                // }
-            }           
+                     
             public static void addEdge(List<List<int>> adj, int v, int w){
                 adj[v].Add(w);
                 adj[w].Add(v);
             }
             public static void addEdge1(List<int>[] adj1, int v, int w){
-                
                 adj1[v].Add(w);
             }
             public static void exploreFriendUsingDFS(List<int>[] adj1, int v, bool[] visited){
@@ -329,7 +238,6 @@ namespace Tubes2Stima{
                 }
 
                 foreach((int a, int b) in eL){
-                    //Console.WriteLine(a + " -> " + b);
                     addEdge(adj, a, b);
                 }
 
@@ -402,20 +310,19 @@ namespace Tubes2Stima{
                 }
                 FriendsRecom(adj);    
             }
-            public static void FriendsRecom(List<List<int>> adj) {
+            public static Dictionary<char, string> FriendsRecom(List<List<int>> adj) {
                 myFriends = new List<int>();
                 bool[] visited = new bool[nVertices];
                 mutuals = new Dictionary<char, string>();
 
                 myFriends.AddRange(adj[namaAkunInt]);
-                /*string items = string.Join(",", myFriends);
-                Console.WriteLine("my" + items); */
                 
-                Console.WriteLine();
-                Console.WriteLine("Friends Recommendation for " + namaAkun + " :");
+                //ATURAN PRINT
+                //Console.WriteLine();
+                //Console.WriteLine("Friends Recommendation for " + namaAkun + " :");
 
                 foreach (var friend in myFriends) {
-                    if (visited[friend] == false /*&& myFriends.Contains(friend)==false*/) {
+                    if (visited[friend] == false) {
                         visited[friend] = true;
                         var currKey = SimpulInt.FirstOrDefault(x => x.Value == friend).Key;
                 
@@ -438,17 +345,26 @@ namespace Tubes2Stima{
                 if (!found) {
                     getMutuals(adj, Tubes2Stima.namaExploreInt);
                 }
-                Console.WriteLine(namaExplore); 
-                Console.WriteLine(countVertices(mutuals[namaExplore]) + " Mutual Friends : " + mutuals[namaExplore]);
 
-                var sortedMutuals = mutuals.OrderByDescending(i => i.Value.Length);
+                mutuals = mutuals.OrderByDescending(i => i.Value.Length).ToDictionary(i => i.Key, i => i.Value);
 
-                foreach((char key, string value) in sortedMutuals) {
-                    if (key != namaExplore) {
+                /*//ATURAN PRINT
+                // print dulu vertice yg di explore
+                foreach((char key, string value) in mutuals) {
+                    if (key == Tubes2Stima.namaExplore) {
                         Console.WriteLine(key);
                         Console.WriteLine(countVertices(value) + " Mutual Friends : " + value);
                     }
                 }
+                // baru print vertice sisanya
+                foreach((char key, string value) in mutuals) {
+                    if (key != Tubes2Stima.namaExplore) {
+                        Console.WriteLine(key);
+                        Console.WriteLine(countVertices(value) + " Mutual Friends : " + value);
+                    }
+                } */
+
+                return mutuals;
             }
             public static void getMutuals(List<List<int>> adj, int vertice) {
                 currFriends = new List<int>();
@@ -457,7 +373,6 @@ namespace Tubes2Stima{
                 var currV = SimpulInt.FirstOrDefault(x => x.Value == vertice).Key;
 
                 var currMutuals = myFriends.Intersect(currFriends).ToList();  
-                //currMutuals = currMutuals.Except(myFriends);
 
                 List<char> convertedMutuals = new List<char>();
                 foreach (var i in currMutuals) {
@@ -480,7 +395,6 @@ namespace Tubes2Stima{
                 return i;
             }   
         }
-
         class utama{
             public static void Main(String[] args){
                 Tubes2Stima.InputInt();
